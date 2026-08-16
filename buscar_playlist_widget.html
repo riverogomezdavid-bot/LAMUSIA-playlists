@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscar mi playlist</title>
+<style>
+  #buscar-playlist-widget {
+    --bp-accent: #87ffd3;
+    --bp-accent-dark: #5fe6b8;
+    --bp-accent-text: #0a1f17;
+    --bp-text: #ffffff;
+    --bp-muted: #9aa8a2;
+    --bp-border: #33413c;
+    --bp-bg-input: #141a17;
+    --bp-bg-input-disabled: #0d100e;
+    --bp-bg-info: rgba(96, 165, 250, 0.12);
+    --bp-text-info: #93c5fd;
+    --bp-bg-warn: rgba(248, 113, 113, 0.12);
+    --bp-text-warn: #fca5a5;
+    --bp-bg-ok: rgba(135, 255, 211, 0.12);
+    --bp-text-ok: #87ffd3;
+    --bp-radius: 10px;
+    --bp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    max-width: 420px;
+    margin: 0 auto;
+    font-family: var(--bp-font);
+    color: var(--bp-text);
+  }
+
+  body { background: #000; }
+
+  #buscar-playlist-widget .bp-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--bp-text);
+  }
+
+  #buscar-playlist-widget .bp-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  #buscar-playlist-widget input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 14px;
+    font-size: 15px;
+    background: var(--bp-bg-input);
+    color: var(--bp-text);
+    border: 1px solid var(--bp-border);
+    border-radius: var(--bp-radius);
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  #buscar-playlist-widget input[type="text"]::placeholder {
+    color: var(--bp-muted);
+  }
+
+  #buscar-playlist-widget input[type="text"]:focus-visible {
+    border-color: var(--bp-accent);
+    box-shadow: 0 0 0 3px rgba(135, 255, 211, 0.18);
+  }
+
+  #buscar-playlist-widget input[type="text"]:disabled {
+    background: var(--bp-bg-input-disabled);
+    color: var(--bp-muted);
+  }
+
+  #buscar-playlist-widget button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bp-accent-text);
+    background: var(--bp-accent);
+    border: none;
+    border-radius: var(--bp-radius);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s ease;
+  }
+
+  #buscar-playlist-widget button:hover:not(:disabled) {
+    background: var(--bp-accent-dark);
+  }
+
+  #buscar-playlist-widget button:focus-visible {
+    outline: 3px solid rgba(135, 255, 211, 0.4);
+    outline-offset: 2px;
+  }
+
+  #buscar-playlist-widget button:disabled {
+    background: var(--bp-muted);
+    cursor: not-allowed;
+  }
+
+  #buscar-playlist-widget .bp-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(10, 31, 23, 0.35);
+    border-top-color: var(--bp-accent-text);
+    border-radius: 50%;
+    animation: bp-spin 0.7s linear infinite;
+    display: none;
+  }
+
+  #buscar-playlist-widget button[data-loading="true"] .bp-spinner {
+    display: inline-block;
+  }
+
+  @keyframes bp-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  #buscar-playlist-widget .bp-resultado {
+    margin-top: 14px;
+    padding: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    border-radius: var(--bp-radius);
+  }
+
+  #buscar-playlist-widget .bp-resultado:empty {
+    display: none;
+  }
+
+  #buscar-playlist-widget .bp-resultado.bp-info {
+    padding: 12px 14px;
+    background: var(--bp-bg-info);
+    color: var(--bp-text-info);
+  }
+
+  #buscar-playlist-widget .bp-resultado.bp-warn {
+    padding: 12px 14px;
+    background: var(--bp-bg-warn);
+    color: var(--bp-text-warn);
+  }
+
+  #buscar-playlist-widget .bp-resultado.bp-ok {
+    padding: 12px 14px;
+    background: var(--bp-bg-ok);
+    color: var(--bp-text-ok);
+  }
+
+  #buscar-playlist-widget .bp-resultado.bp-ok a {
+    color: var(--bp-text-ok);
+    font-weight: 700;
+    text-decoration: underline;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #buscar-playlist-widget .bp-spinner { animation: none; }
+  }
+
+  #buscar-playlist-widget .bp-later-note {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--bp-text-ok);
+  }
+  #buscar-playlist-widget .bp-later-note a {
+    color: var(--bp-text-ok);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<div id="buscar-playlist-widget">
+  <label class="bp-label" for="bp-input">Número de pedido</label>
+  <div class="bp-row">
+    <input type="text" id="bp-input" placeholder="Ej. 12345" autocomplete="off" inputmode="numeric">
+    <button id="bp-boton" type="button">
+      <span class="bp-spinner" aria-hidden="true"></span>
+      <span class="bp-boton-texto">Buscar</span>
+    </button>
+  </div>
+  <div id="bp-resultado" class="bp-resultado" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ⚠️ Sustituir por la URL real de tu Web App (Implementar → Administrar
+  // implementaciones), terminada en /exec.
+  var SCRIPT_URL = 'PON_AQUI_LA_URL_DE_TU_WEB_APP/exec';
+
+  var TIMEOUT_MS = 15000;
+
+  var input = document.getElementById('bp-input');
+  var boton = document.getElementById('bp-boton');
+  var botonTexto = boton.querySelector('.bp-boton-texto');
+  var resultado = document.getElementById('bp-resultado');
+
+  // URL de la página aparte donde el cliente valora la playlist más
+  // adelante, cuando ya la haya escuchado. Ajusta el nombre de archivo
+  // si la alojas con otro nombre o ruta.
+  var VALORAR_URL = 'valorar_playlist.html';
+
+  var jsonpCounter = 0;
+
+  // Se usa JSONP (etiqueta <script>) en vez de fetch() porque los Web
+  // Apps de Apps Script no permiten fijar cabeceras CORS propias y fetch()
+  // puede fallar con un error de CORS según el navegador/configuración.
+  // JSONP no está sujeto a esa restricción.
+  function buscarPlaylist(playlistId) {
+    return new Promise(function (resolve, reject) {
+      var callbackName = 'bpCallback_' + Date.now() + '_' + (jsonpCounter++);
+      var script = document.createElement('script');
+      var finished = false;
+      var timeoutId;
+
+      function limpiar() {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(function () {
+        if (finished) return;
+        finished = true;
+        limpiar();
+        reject(new Error('timeout'));
+      }, TIMEOUT_MS);
+
+      window[callbackName] = function (data) {
+        if (finished) return;
+        finished = true;
+        limpiar();
+        resolve(data);
+      };
+
+      script.onerror = function () {
+        if (finished) return;
+        finished = true;
+        limpiar();
+        reject(new Error('network_error'));
+      };
+
+      script.src = SCRIPT_URL +
+        '?playlist_id=' + encodeURIComponent(playlistId) +
+        '&callback=' + callbackName;
+
+      document.body.appendChild(script);
+    });
+  }
+
+  function setCargando(cargando) {
+    boton.disabled = cargando;
+    input.disabled = cargando;
+    boton.setAttribute('data-loading', cargando ? 'true' : 'false');
+    botonTexto.textContent = cargando ? 'Buscando…' : 'Buscar';
+  }
+
+  function mostrarMensaje(texto, tipo) {
+    var oldNote = document.querySelector('#buscar-playlist-widget .bp-later-note');
+    if (oldNote) oldNote.parentNode.removeChild(oldNote);
+    resultado.className = 'bp-resultado' + (tipo ? ' ' + tipo : '');
+    resultado.textContent = texto;
+  }
+
+  function mostrarResultado(data) {
+    if (!data || !data.status) {
+      mostrarMensaje('No se ha podido comprobar tu playlist ahora mismo. Inténtalo de nuevo en unos minutos.', 'bp-warn');
+      return;
+    }
+
+    switch (data.status) {
+      case 'ready':
+        resultado.className = 'bp-resultado bp-ok';
+        resultado.textContent = '¡Aquí tienes tu playlist! ';
+        var link = document.createElement('a');
+        link.href = data.playlist_url;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        link.textContent = 'Pincha aquí para acceder a ella';
+        resultado.appendChild(link);
+
+        var laterNote = document.createElement('p');
+        laterNote.className = 'bp-later-note';
+        var valorarLink = document.createElement('a');
+        valorarLink.href = data.feedback_link || (VALORAR_URL + '?playlist_id=' + encodeURIComponent(input.value.trim()));
+        valorarLink.textContent = 'aquí';
+        laterNote.appendChild(document.createTextNode('Cuando la hayas disfrutado, cuéntanos qué te ha parecido '));
+        laterNote.appendChild(valorarLink);
+        laterNote.appendChild(document.createTextNode(' — nos ayuda mucho 🙌'));
+        resultado.parentNode.insertBefore(laterNote, resultado.nextSibling);
+        break;
+
+      case 'not_ready':
+        mostrarMensaje(data.message || 'Tu playlist aún no está lista. Prueba más tarde.', 'bp-info');
+        break;
+
+      case 'not_found':
+        mostrarMensaje('No encontramos ninguna solicitud con ese número. Revisa que sea correcto.', 'bp-warn');
+        break;
+
+      default:
+        mostrarMensaje(data.message || 'Ha ocurrido un error. Inténtalo de nuevo en unos minutos.', 'bp-warn');
+    }
+  }
+
+  function onBuscarClick() {
+    var playlistId = input.value.trim();
+
+    if (!playlistId) {
+      mostrarMensaje('Escribe tu número de pedido.', 'bp-warn');
+      input.focus();
+      return;
+    }
+
+    mostrarMensaje('', '');
+    setCargando(true);
+
+    buscarPlaylist(playlistId)
+      .then(mostrarResultado)
+      .catch(function () {
+        mostrarMensaje('No se ha podido comprobar tu playlist ahora mismo. Inténtalo de nuevo en unos minutos.', 'bp-warn');
+      })
+      .then(function () {
+        setCargando(false);
+      });
+  }
+
+  boton.addEventListener('click', onBuscarClick);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') onBuscarClick();
+  });
+})();
+</script>
+
+</body>
+</html>

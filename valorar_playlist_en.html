@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<title>Rate my playlist</title>
+<style>
+  #valorar-playlist-widget {
+    --bp-accent: #87ffd3;
+    --bp-accent-dark: #5fe6b8;
+    --bp-accent-text: #0a1f17;
+    --bp-text: #ffffff;
+    --bp-muted: #9aa8a2;
+    --bp-border: #33413c;
+    --bp-bg-input: #141a17;
+    --bp-bg-input-disabled: #0d100e;
+    --bp-bg-chip: #141a17;
+    --bp-bg-info: rgba(96, 165, 250, 0.12);
+    --bp-text-info: #93c5fd;
+    --bp-bg-warn: rgba(248, 113, 113, 0.12);
+    --bp-text-warn: #fca5a5;
+    --bp-bg-ok: rgba(135, 255, 211, 0.12);
+    --bp-text-ok: #87ffd3;
+    --bp-radius: 10px;
+    --bp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    max-width: 420px;
+    margin: 40px auto;
+    font-family: var(--bp-font);
+    color: var(--bp-text);
+    padding: 0 16px;
+  }
+
+  body { background: #000; }
+
+  #valorar-playlist-widget h2 {
+    font-size: 19px;
+    margin: 0 0 4px;
+    color: var(--bp-text);
+  }
+  #valorar-playlist-widget .subtitle {
+    font-size: 14px;
+    color: var(--bp-muted);
+    margin: 0 0 20px;
+  }
+
+  #valorar-playlist-widget .bp-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--bp-text);
+  }
+  #valorar-playlist-widget .bp-row { display: flex; gap: 8px; }
+
+  #valorar-playlist-widget input[type="text"] {
+    flex: 1;
+    min-width: 0;
+    padding: 11px 14px;
+    font-size: 15px;
+    background: var(--bp-bg-input);
+    color: var(--bp-text);
+    border: 1px solid var(--bp-border);
+    border-radius: var(--bp-radius);
+    outline: none;
+  }
+  #valorar-playlist-widget input[type="text"]::placeholder { color: var(--bp-muted); }
+  #valorar-playlist-widget input[type="text"]:focus-visible {
+    border-color: var(--bp-accent);
+    box-shadow: 0 0 0 3px rgba(135, 255, 211, 0.18);
+  }
+  #valorar-playlist-widget input[type="text"]:disabled { background: var(--bp-bg-input-disabled); color: var(--bp-muted); }
+
+  #valorar-playlist-widget button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: var(--bp-radius);
+    font-weight: 600;
+  }
+  #valorar-playlist-widget .bp-btn-primary {
+    background: var(--bp-accent);
+    color: var(--bp-accent-text);
+    padding: 11px 20px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  #valorar-playlist-widget .bp-btn-primary:hover:not(:disabled) { background: var(--bp-accent-dark); }
+  #valorar-playlist-widget .bp-btn-primary:disabled { background: var(--bp-muted); cursor: not-allowed; }
+
+  #valorar-playlist-widget .bp-mensaje {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: var(--bp-radius);
+    font-size: 14.5px;
+    line-height: 1.5;
+  }
+  #valorar-playlist-widget .bp-mensaje:empty { display: none; }
+  #valorar-playlist-widget .bp-mensaje.bp-info { background: var(--bp-bg-info); color: var(--bp-text-info); }
+  #valorar-playlist-widget .bp-mensaje.bp-warn { background: var(--bp-bg-warn); color: var(--bp-text-warn); }
+  #valorar-playlist-widget .bp-mensaje.bp-ok { background: var(--bp-bg-ok); color: var(--bp-text-ok); }
+
+  #valorar-playlist-widget .bp-rating-block {
+    margin-top: 18px;
+    padding: 18px;
+    background: var(--bp-bg-info);
+    border-radius: var(--bp-radius);
+    text-align: center;
+    display: none;
+  }
+  #valorar-playlist-widget .bp-rating-question {
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bp-text);
+  }
+  #valorar-playlist-widget .bp-stars { display: flex; justify-content: center; gap: 4px; }
+  #valorar-playlist-widget .bp-star {
+    display: inline-flex;
+    background: none !important;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    padding: 2px;
+    font-size: 34px;
+    line-height: 1;
+    color: #45524c;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: color 0.1s ease, transform 0.1s ease;
+  }
+  #valorar-playlist-widget .bp-star:hover:not(:disabled) { background: none !important; transform: scale(1.12); }
+  #valorar-playlist-widget .bp-star:focus-visible { outline: 2px solid var(--bp-accent); outline-offset: 2px; }
+  #valorar-playlist-widget .bp-star.bp-star-on { color: #f5b400; }
+
+  #valorar-playlist-widget .bp-reasons {
+    margin-top: 16px;
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  #valorar-playlist-widget .bp-reason-chip {
+    display: inline-flex;
+    background: var(--bp-bg-chip) !important;
+    border: 1px solid var(--bp-border);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 20px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    color: var(--bp-text);
+  }
+  #valorar-playlist-widget .bp-reason-chip:hover:not(:disabled) { background: var(--bp-bg-chip) !important; border-color: var(--bp-accent); }
+  #valorar-playlist-widget .bp-reason-chip:focus-visible { outline: 2px solid var(--bp-accent); outline-offset: 2px; }
+
+  #valorar-playlist-widget .bp-thanks {
+    display: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--bp-text-ok);
+  }
+</style>
+</head>
+<body>
+
+<div id="valorar-playlist-widget">
+  <h2>What did you think of your playlist?</h2>
+  <p class="subtitle">Your feedback helps us make the next ones even better.</p>
+
+  <label class="bp-label" for="bp-input">Order number</label>
+  <div class="bp-row">
+    <input type="text" id="bp-input" placeholder="E.g. 12345" autocomplete="off" inputmode="numeric">
+    <button class="bp-btn-primary" id="bp-check-btn" type="button">Continue</button>
+  </div>
+
+  <div id="bp-mensaje" class="bp-mensaje"></div>
+
+  <div id="bp-rating-block" class="bp-rating-block">
+    <p class="bp-rating-question">Rate your experience</p>
+    <div class="bp-stars" id="bp-stars">
+      <button type="button" class="bp-star" data-value="1" aria-label="1 star">★</button>
+      <button type="button" class="bp-star" data-value="2" aria-label="2 stars">★</button>
+      <button type="button" class="bp-star" data-value="3" aria-label="3 stars">★</button>
+      <button type="button" class="bp-star" data-value="4" aria-label="4 stars">★</button>
+      <button type="button" class="bp-star" data-value="5" aria-label="5 stars">★</button>
+    </div>
+    <div id="bp-reasons" class="bp-reasons"></div>
+    <p id="bp-thanks" class="bp-thanks">Thanks for your feedback! 🙌</p>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ⚠️ Replace with the real URL of your deployed Web App, ending in /exec.
+  var SCRIPT_URL = 'PON_AQUI_LA_URL_DE_TU_WEB_APP/exec';
+
+  var FEEDBACK_REASONS = [
+    'Songs I don\'t like',
+    'The order doesn\'t work for me',
+    'Missing songs I expected',
+    'Something else'
+  ];
+
+  var input = document.getElementById('bp-input');
+  var checkBtn = document.getElementById('bp-check-btn');
+  var mensaje = document.getElementById('bp-mensaje');
+  var ratingBlock = document.getElementById('bp-rating-block');
+  var starsWrap = document.getElementById('bp-stars');
+  var reasonsWrap = document.getElementById('bp-reasons');
+  var thanksMsg = document.getElementById('bp-thanks');
+
+  var currentPlaylistId = null;
+
+  var jsonpCounter = 0;
+  function callBackend(params) {
+    return new Promise(function (resolve, reject) {
+      var callbackName = 'vp_' + Date.now() + '_' + (jsonpCounter++);
+      var script = document.createElement('script');
+      var finished = false;
+      var timeoutId;
+
+      function cleanup() {
+        delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+        clearTimeout(timeoutId);
+      }
+
+      timeoutId = setTimeout(function () {
+        if (finished) return;
+        finished = true; cleanup(); reject(new Error('timeout'));
+      }, 15000);
+
+      window[callbackName] = function (data) {
+        if (finished) return;
+        finished = true; cleanup(); resolve(data);
+      };
+
+      var qs = Object.keys(params).map(function (k) {
+        return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+      }).join('&');
+
+      script.src = SCRIPT_URL + '?' + qs + '&callback=' + callbackName;
+      script.onerror = function () {
+        if (finished) return;
+        finished = true; cleanup(); reject(new Error('network_error'));
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  function mostrarMensaje(texto, tipo) {
+    mensaje.className = 'bp-mensaje' + (tipo ? ' ' + tipo : '');
+    mensaje.textContent = texto;
+  }
+
+  function setCargando(cargando) {
+    checkBtn.disabled = cargando;
+    input.disabled = cargando;
+    checkBtn.textContent = cargando ? 'Checking…' : 'Continue';
+  }
+
+  function comprobarPlaylist() {
+    var playlistId = input.value.trim();
+    if (!playlistId) {
+      mostrarMensaje('Please enter your order number.', 'bp-warn');
+      input.focus();
+      return;
+    }
+
+    mostrarMensaje('', '');
+    ratingBlock.style.display = 'none';
+    setCargando(true);
+
+    callBackend({ action: 'submit_feedback', playlist_id: playlistId }).then(function (data) {
+      setCargando(false);
+
+      if (data.status === 'not_found') {
+        mostrarMensaje('We couldn\'t find any order with that number. Please check it\'s correct.', 'bp-warn');
+        return;
+      }
+      if (data.status === 'not_delivered') {
+        mostrarMensaje(data.message || 'We haven\'t delivered this playlist to you yet.', 'bp-info');
+        return;
+      }
+      if (data.status !== 'ok') {
+        mostrarMensaje('We couldn\'t check this right now. Please try again in a few minutes.', 'bp-warn');
+        return;
+      }
+
+      currentPlaylistId = playlistId;
+
+      if (data.already_rated) {
+        mostrarMensaje('You already rated this playlist ' + data.previous_rating + ' ★ — feel free to change your rating.', 'bp-info');
+      } else {
+        mostrarMensaje('', '');
+      }
+
+      mostrarBloqueValoracion();
+    }).catch(function () {
+      setCargando(false);
+      mostrarMensaje('We couldn\'t connect. Please try again in a few minutes.', 'bp-warn');
+    });
+  }
+
+  function mostrarBloqueValoracion() {
+    ratingBlock.style.display = 'block';
+    starsWrap.style.display = 'flex';
+    reasonsWrap.style.display = 'none';
+    reasonsWrap.innerHTML = '';
+    thanksMsg.style.display = 'none';
+    pintarEstrellas(0);
+  }
+
+  function pintarEstrellas(value) {
+    Array.prototype.forEach.call(starsWrap.children, function (star) {
+      var starValue = Number(star.getAttribute('data-value'));
+      star.classList.toggle('bp-star-on', starValue <= value);
+    });
+  }
+
+  Array.prototype.forEach.call(starsWrap.children, function (star) {
+    star.addEventListener('mouseenter', function () {
+      pintarEstrellas(Number(star.getAttribute('data-value')));
+    });
+    star.addEventListener('click', function () {
+      var value = Number(star.getAttribute('data-value'));
+      pintarEstrellas(value);
+      onRatingElegido(value);
+    });
+  });
+
+  function onRatingElegido(value) {
+    starsWrap.style.display = 'none';
+    if (value <= 3) {
+      mostrarMotivos(value);
+    } else {
+      enviarValoracion(value, '');
+    }
+  }
+
+  function mostrarMotivos(value) {
+    reasonsWrap.innerHTML = '';
+    reasonsWrap.style.display = 'flex';
+
+    FEEDBACK_REASONS.forEach(function (texto) {
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'bp-reason-chip';
+      chip.textContent = texto;
+      chip.addEventListener('click', function () { enviarValoracion(value, texto); });
+      reasonsWrap.appendChild(chip);
+    });
+
+    var omitir = document.createElement('button');
+    omitir.type = 'button';
+    omitir.className = 'bp-reason-chip';
+    omitir.textContent = 'Prefer not to say';
+    omitir.addEventListener('click', function () { enviarValoracion(value, ''); });
+    reasonsWrap.appendChild(omitir);
+  }
+
+  function enviarValoracion(rating, reason) {
+    reasonsWrap.style.display = 'none';
+
+    callBackend({
+      action: 'submit_feedback',
+      playlist_id: currentPlaylistId,
+      rating: rating,
+      reason: reason || ''
+    }).then(function () {
+      thanksMsg.style.display = 'block';
+    }).catch(function () {
+      // The submission may still have gone through even if the confirmation
+      // fails to come back; the thank-you message is shown anyway to avoid
+      // confusing the customer.
+      thanksMsg.style.display = 'block';
+    });
+  }
+
+  checkBtn.addEventListener('click', comprobarPlaylist);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') comprobarPlaylist();
+  });
+
+  // If arriving from the "Search" widget's link with the order number
+  // already known, it's pre-filled and checked automatically, so the
+  // customer doesn't have to type it again.
+  var urlParams = new URLSearchParams(window.location.search);
+  var prefill = urlParams.get('playlist_id');
+  if (prefill) {
+    input.value = prefill;
+    comprobarPlaylist();
+  }
+})();
+</script>
+
+</body>
+</html>
