@@ -22,15 +22,15 @@
     --bp-text-ok: #87ffd3;
     --bp-radius: 10px;
     --bp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-
+ 
     max-width: 420px;
     margin: 0 auto;
     font-family: var(--bp-font);
     color: var(--bp-text);
   }
-
+ 
   body { background: #000; }
-
+ 
   #buscar-playlist-widget .bp-label {
     display: block;
     font-size: 14px;
@@ -38,12 +38,12 @@
     margin-bottom: 6px;
     color: var(--bp-text);
   }
-
+ 
   #buscar-playlist-widget .bp-row {
     display: flex;
     gap: 8px;
   }
-
+ 
   #buscar-playlist-widget input[type="text"] {
     flex: 1;
     min-width: 0;
@@ -56,21 +56,21 @@
     outline: none;
     transition: border-color 0.15s ease;
   }
-
+ 
   #buscar-playlist-widget input[type="text"]::placeholder {
     color: var(--bp-muted);
   }
-
+ 
   #buscar-playlist-widget input[type="text"]:focus-visible {
     border-color: var(--bp-accent);
     box-shadow: 0 0 0 3px rgba(135, 255, 211, 0.18);
   }
-
+ 
   #buscar-playlist-widget input[type="text"]:disabled {
     background: var(--bp-bg-input-disabled);
     color: var(--bp-muted);
   }
-
+ 
   #buscar-playlist-widget button {
     display: inline-flex;
     align-items: center;
@@ -87,21 +87,21 @@
     white-space: nowrap;
     transition: background 0.15s ease;
   }
-
+ 
   #buscar-playlist-widget button:hover:not(:disabled) {
     background: var(--bp-accent-dark);
   }
-
+ 
   #buscar-playlist-widget button:focus-visible {
     outline: 3px solid rgba(135, 255, 211, 0.4);
     outline-offset: 2px;
   }
-
+ 
   #buscar-playlist-widget button:disabled {
     background: var(--bp-muted);
     cursor: not-allowed;
   }
-
+ 
   #buscar-playlist-widget .bp-spinner {
     width: 14px;
     height: 14px;
@@ -111,15 +111,15 @@
     animation: bp-spin 0.7s linear infinite;
     display: none;
   }
-
+ 
   #buscar-playlist-widget button[data-loading="true"] .bp-spinner {
     display: inline-block;
   }
-
+ 
   @keyframes bp-spin {
     to { transform: rotate(360deg); }
   }
-
+ 
   #buscar-playlist-widget .bp-resultado {
     margin-top: 14px;
     padding: 0;
@@ -127,39 +127,39 @@
     line-height: 1.5;
     border-radius: var(--bp-radius);
   }
-
+ 
   #buscar-playlist-widget .bp-resultado:empty {
     display: none;
   }
-
+ 
   #buscar-playlist-widget .bp-resultado.bp-info {
     padding: 12px 14px;
     background: var(--bp-bg-info);
     color: var(--bp-text-info);
   }
-
+ 
   #buscar-playlist-widget .bp-resultado.bp-warn {
     padding: 12px 14px;
     background: var(--bp-bg-warn);
     color: var(--bp-text-warn);
   }
-
+ 
   #buscar-playlist-widget .bp-resultado.bp-ok {
     padding: 12px 14px;
     background: var(--bp-bg-ok);
     color: var(--bp-text-ok);
   }
-
+ 
   #buscar-playlist-widget .bp-resultado.bp-ok a {
     color: var(--bp-text-ok);
     font-weight: 700;
     text-decoration: underline;
   }
-
+ 
   @media (prefers-reduced-motion: reduce) {
     #buscar-playlist-widget .bp-spinner { animation: none; }
   }
-
+ 
   #buscar-playlist-widget .bp-later-note {
     margin-top: 10px;
     font-size: 13px;
@@ -172,7 +172,7 @@
 </style>
 </head>
 <body>
-
+ 
 <div id="buscar-playlist-widget">
   <label class="bp-label" for="bp-input">Order number</label>
   <div class="bp-row">
@@ -184,29 +184,29 @@
   </div>
   <div id="bp-resultado" class="bp-resultado" role="status" aria-live="polite"></div>
 </div>
-
+ 
 <script>
 (function () {
   'use strict';
-
+ 
   // ⚠️ Replace with the real URL of your deployed Web App (Deploy →
   // Manage deployments), ending in /exec.
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZIfiK_G7Ub1KfV-3Hx-aYPKxqi441B_ORJLE1ZRn5jicp29-Pt6sg6dH2CRhgp_I_/exec';
-
+ 
   var TIMEOUT_MS = 15000;
-
+ 
   var input = document.getElementById('bp-input');
   var boton = document.getElementById('bp-boton');
   var botonTexto = boton.querySelector('.bp-boton-texto');
   var resultado = document.getElementById('bp-resultado');
-
+ 
   // URL of the separate page where the customer rates the playlist
   // later on, once they've listened to it. Adjust the filename/path if
   // you host it somewhere else.
   var VALORAR_URL = 'valorar_playlist_en.html';
-
+ 
   var jsonpCounter = 0;
-
+ 
   // JSONP (a <script> tag) is used instead of fetch() because Apps
   // Script Web Apps don't allow setting custom CORS headers, and fetch()
   // can fail with a CORS error depending on the browser/setup. JSONP
@@ -217,62 +217,62 @@
       var script = document.createElement('script');
       var finished = false;
       var timeoutId;
-
+ 
       function limpiar() {
         delete window[callbackName];
         if (script.parentNode) script.parentNode.removeChild(script);
         clearTimeout(timeoutId);
       }
-
+ 
       timeoutId = setTimeout(function () {
         if (finished) return;
         finished = true;
         limpiar();
         reject(new Error('timeout'));
       }, TIMEOUT_MS);
-
+ 
       window[callbackName] = function (data) {
         if (finished) return;
         finished = true;
         limpiar();
         resolve(data);
       };
-
+ 
       script.onerror = function () {
         if (finished) return;
         finished = true;
         limpiar();
         reject(new Error('network_error'));
       };
-
+ 
       script.src = SCRIPT_URL +
         '?playlist_id=' + encodeURIComponent(playlistId) +
         '&callback=' + callbackName;
-
+ 
       document.body.appendChild(script);
     });
   }
-
+ 
   function setCargando(cargando) {
     boton.disabled = cargando;
     input.disabled = cargando;
     boton.setAttribute('data-loading', cargando ? 'true' : 'false');
     botonTexto.textContent = cargando ? 'Searching…' : 'Search';
   }
-
+ 
   function mostrarMensaje(texto, tipo) {
     var oldNote = document.querySelector('#buscar-playlist-widget .bp-later-note');
     if (oldNote) oldNote.parentNode.removeChild(oldNote);
     resultado.className = 'bp-resultado' + (tipo ? ' ' + tipo : '');
     resultado.textContent = texto;
   }
-
+ 
   function mostrarResultado(data) {
     if (!data || !data.status) {
       mostrarMensaje('We couldn\'t check your playlist right now. Please try again in a few minutes.', 'bp-warn');
       return;
     }
-
+ 
     switch (data.status) {
       case 'ready':
         resultado.className = 'bp-resultado bp-ok';
@@ -283,7 +283,7 @@
         link.rel = 'noopener noreferrer';
         link.textContent = 'Click here to open it';
         resultado.appendChild(link);
-
+ 
         var laterNote = document.createElement('p');
         laterNote.className = 'bp-later-note';
         var valorarLink = document.createElement('a');
@@ -294,32 +294,32 @@
         laterNote.appendChild(document.createTextNode(' — it really helps us 🙌'));
         resultado.parentNode.insertBefore(laterNote, resultado.nextSibling);
         break;
-
+ 
       case 'not_ready':
         mostrarMensaje(data.message || 'Your playlist isn\'t ready yet. Please try again later.', 'bp-info');
         break;
-
+ 
       case 'not_found':
         mostrarMensaje('We couldn\'t find any order with that number. Please check it\'s correct.', 'bp-warn');
         break;
-
+ 
       default:
         mostrarMensaje(data.message || 'Something went wrong. Please try again in a few minutes.', 'bp-warn');
     }
   }
-
+ 
   function onBuscarClick() {
     var playlistId = input.value.trim();
-
+ 
     if (!playlistId) {
       mostrarMensaje('Please enter your order number.', 'bp-warn');
       input.focus();
       return;
     }
-
+ 
     mostrarMensaje('', '');
     setCargando(true);
-
+ 
     buscarPlaylist(playlistId)
       .then(mostrarResultado)
       .catch(function () {
@@ -329,13 +329,24 @@
         setCargando(false);
       });
   }
-
+ 
   boton.addEventListener('click', onBuscarClick);
   input.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') onBuscarClick();
   });
+ 
+  // If arriving from a link with the order number already included
+  // (e.g. sent by email once the waiting time has passed), it's
+  // pre-filled and checked automatically, so the customer doesn't have
+  // to type it in.
+  var urlParams = new URLSearchParams(window.location.search);
+  var prefill = urlParams.get('playlist_id');
+  if (prefill) {
+    input.value = prefill;
+    onBuscarClick();
+  }
 })();
 </script>
-
+ 
 </body>
 </html>
