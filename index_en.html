@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- EDITAR: título de pestaña del navegador -->
+<title>LAMUSIA — Always the right song, right on cue</title>
+<!-- EDITAR: descripción para buscadores (SEO) -->
+<meta name="description" content="Curated soundtracks for high-end private events. Every song, chosen for your event and refined by hand.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #100C10;
+    --noir-2: #17121A;
+    --champagne: #C9A961;
+    --champagne-light: #E6D4A0;
+    --champagne-dark: #A98A47;
+    --bone: #EDE7DA;
+    --smoke: #9C9689;
+    --hair: rgba(237,231,218,0.14);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--noir);
+    color: var(--bone);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+  h1, h2, h3 { font-family: 'Fraunces', serif; font-weight: 500; margin: 0; font-optical-sizing: none; font-variation-settings: 'opsz' 28; }
+
+  :focus-visible { outline: 2px solid var(--champagne); outline-offset: 3px; }
+
+  /* ---------- NAV ---------- */
+  header {
+    position: sticky; top: 0; z-index: 20;
+    background: rgba(16,12,16,0.88);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hair);
+  }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 32px; max-width: 1120px; margin: 0 auto; }
+  .logo { font-family: 'Fraunces', serif; font-size: 21px; font-optical-sizing: none; font-variation-settings: 'opsz' 28; text-decoration: none; }
+  .logo .la { font-style: italic; font-weight: 500; color: var(--champagne-light); }
+  .logo .mu { color: var(--bone); font-weight: 600; }
+  .nav-links { display: flex; align-items: center; gap: 36px; }
+  .nav-links a { text-decoration: none; font-size: 14.5px; color: var(--smoke); transition: color .15s ease; }
+  .nav-links a:hover { color: var(--bone); }
+  .nav-cta {
+    background: var(--champagne); color: var(--noir); font-weight: 700; font-size: 14px;
+    padding: 10px 20px; border-radius: 30px; text-decoration: none; white-space: nowrap;
+    transition: background .15s ease;
+  }
+  .nav-cta:hover { background: var(--champagne-dark); }
+  .lang-switch { display: flex; align-items: center; gap: 6px; font-size: 13px; margin-left: 4px; }
+  .lang-switch a { text-decoration: none; color: var(--smoke); }
+  .lang-switch a.current { color: var(--champagne-light); font-weight: 700; pointer-events: none; }
+  .lang-switch a:hover:not(.current) { color: var(--bone); }
+  .lang-switch .sep { color: var(--hair); }
+  .nav-toggle { display: none; }
+  .mobile-menu { display: none; }
+
+  /* ---------- HERO ---------- */
+  .hero { padding: 110px 0 110px; text-align: center; position: relative; overflow: hidden; }
+  .hero-curve { position: absolute; left: 0; right: 0; bottom: -30px; height: 140px; opacity: 0.35; pointer-events: none; }
+  .hero-curve svg { width: 100%; height: 100%; }
+  .hero-inner { position: relative; }
+  .hero-wordmark {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 78px; line-height: 1;
+    margin: 0 0 20px; font-optical-sizing: none; font-variation-settings: 'opsz' 28;
+  }
+  .hero-wordmark .la {
+    font-style: italic; font-weight: 500; color: var(--champagne-light);
+    text-shadow: 0 0 20px rgba(201,169,97,1), 0 0 46px rgba(201,169,97,0.85), 0 0 90px rgba(201,169,97,0.5);
+  }
+  .hero-wordmark .mu { color: var(--bone); }
+  .hero-tagline {
+    font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; font-size: 19px;
+    color: var(--smoke); margin: 0 0 34px;
+  }
+  .hero h1 { font-size: 58px; line-height: 1.12; max-width: 780px; margin: 0 auto 22px; font-weight: 500; }
+  .hero p.sub { font-size: 17.5px; color: var(--smoke); max-width: 540px; margin: 0 auto 40px; line-height: 1.65; }
+  .btn-hero {
+    display: inline-block; background: var(--champagne); color: var(--noir); font-weight: 700; font-size: 16px;
+    padding: 16px 34px; border-radius: 30px; text-decoration: none;
+    transition: background .15s ease, transform .15s ease;
+  }
+  .btn-hero:hover { background: var(--champagne-dark); transform: translateY(-1px); }
+
+  /* ---------- SECTION shared ---------- */
+  section { padding: 88px 0; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--champagne); font-weight: 700; margin: 0 0 14px; text-align: center; }
+  .section-title { font-size: 32px; text-align: center; max-width: 620px; margin: 0 auto 56px; }
+
+  /* ---------- FRANJA DE FOTOS ---------- */
+  .photo-strip { border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
+  .photo-strip-inner { display: flex; gap: 3px; width: 100%; }
+  .photo-item {
+    flex: 1 1 25%; aspect-ratio: 4 / 3; position: relative; overflow: hidden;
+    background: linear-gradient(150deg, #1B151D 0%, #241C29 100%);
+  }
+  .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo-placeholder {
+    position: absolute; inset: 10px; border: 1px dashed rgba(237,231,218,0.22);
+    border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    padding: 18px; text-align: center;
+  }
+  .photo-placeholder span {
+    font-size: 12px; color: var(--smoke); line-height: 1.55; font-family: 'Manrope', sans-serif;
+  }
+
+  /* ---------- PASOS ---------- */
+  .steps { border-top: 1px solid var(--hair); }  .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .step { background: var(--noir-2); border: 1px solid var(--hair); border-radius: 16px; padding: 30px 28px; }
+  .step-n { font-family: 'Fraunces', serif; font-style: italic; color: var(--champagne); font-size: 22px; }
+  .step h3 { font-size: 17px; font-weight: 700; font-family: 'Manrope', sans-serif; margin: 14px 0 8px; }
+  .step p { font-size: 14px; color: var(--smoke); line-height: 1.6; margin: 0; }
+
+  /* ---------- BIFURCACION ---------- */
+  .fork { border-top: 1px solid var(--hair); }
+  .fork-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .fork-card {
+    background: var(--noir-2); border: 1px solid var(--hair); border-radius: 18px;
+    padding: 40px 36px; text-decoration: none; display: block;
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .fork-card:hover { border-color: var(--champagne); transform: translateY(-2px); }
+  .fork-card h3 { font-size: 24px; font-style: italic; font-weight: 500; color: var(--champagne-light); margin-bottom: 12px; }
+  .fork-card p { font-size: 14.5px; color: var(--smoke); line-height: 1.65; margin: 0 0 22px; }
+  .fork-card .link { font-size: 13.5px; font-weight: 700; color: var(--bone); display: inline-flex; align-items: center; gap: 6px; }
+  .fork-card .link .arrow { transition: transform .15s ease; }
+  .fork-card:hover .link .arrow { transform: translateX(3px); }
+
+  /* ---------- POR QUE ---------- */
+  .why { border-top: 1px solid var(--hair); text-align: center; }
+  .why-inner { max-width: 620px; margin: 0 auto; }
+  .why p { font-size: 17px; color: var(--smoke); line-height: 1.75; font-family: 'Fraunces', serif; font-style: italic; font-weight: 400; }
+  .why a { display: inline-block; margin-top: 22px; font-size: 13.5px; font-weight: 700; color: var(--champagne-light); text-decoration: none; font-family: 'Manrope', sans-serif; font-style: normal; }
+
+  /* ---------- FOOTER ---------- */
+  footer { border-top: 1px solid var(--hair); padding: 48px 0; }
+  .footer-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-links { display: flex; gap: 26px; }
+  .footer-links a { font-size: 13px; color: var(--smoke); text-decoration: none; }
+  .footer-links a:hover { color: var(--bone); }
+  .footer-note { font-size: 12.5px; color: var(--smoke); }
+
+  @media (max-width: 780px) {
+    .nav-links { display: none; }
+    .nav-toggle {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 40px; height: 40px; background: transparent; border: 1px solid var(--hair);
+      border-radius: 10px; cursor: pointer; color: var(--bone); order: 2; margin-right: 10px;
+    }
+    nav { flex-wrap: wrap; }
+    .nav-cta { order: 3; }
+    .lang-switch { order: 4; margin-left: 0; }
+    .mobile-menu {
+      display: none;
+      width: 100%; order: 5;
+      flex-direction: column; gap: 4px;
+      padding-top: 18px; margin-top: 18px; border-top: 1px solid var(--hair);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { text-decoration: none; color: var(--smoke); font-size: 15px; padding: 10px 4px; }
+    .mobile-menu a:hover { color: var(--bone); }
+    .hero-wordmark { font-size: 44px; }
+    .hero h1 { font-size: 38px; }
+    .photo-strip-inner { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+    .photo-item { flex: 0 0 78%; scroll-snap-align: start; aspect-ratio: 4 / 3.2; }
+    .photo-strip-inner::-webkit-scrollbar { display: none; }
+    .steps-grid, .fork-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 26px; }
+    nav { padding: 16px 22px; }
+    .wrap { padding: 0 22px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn-hero, .fork-card, .fork-card .link .arrow { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index_en.html" class="logo"><span class="la">la</span><span class="mu">musia</span></a>
+    <div class="nav-links">
+      <a href="para-profesionales_en.html">For professionals</a>
+      <a href="nosotros_en.html">About us</a>
+    </div>
+    <a href="cuentanos-tu-evento_en.html" class="nav-cta">Tell us about your event</a>
+    <div class="lang-switch">
+      <a href="index.html">ES</a>
+      <span class="sep">·</span>
+      <a href="index_en.html" class="current">EN</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobileMenu">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 5H16M2 9H16M2 13H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="para-profesionales_en.html">For professionals</a>
+      <a href="nosotros_en.html">About us</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-curve">
+    <svg viewBox="0 0 1000 200" preserveAspectRatio="none">
+      <path d="M0,130 C110,45 190,175 320,100 C440,30 520,165 650,90 C760,25 830,155 1000,110" fill="none" stroke="url(#hg)" stroke-width="1.5"/>
+      <defs><linearGradient id="hg" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#5B4B7A"/><stop offset="0.5" stop-color="#E6D4A0"/><stop offset="1" stop-color="#5B4B7A"/>
+      </linearGradient></defs>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <h1 class="hero-wordmark"><span class="la">la</span><span class="mu">musia</span></h1>
+    <!-- EDITAR: ESLOGAN — la frase más importante de toda la web -->
+    <p class="hero-tagline">Always the right song, right on cue.</p>
+    <!-- EDITAR: subtítulo del hero, bajo el eslogan -->
+    <p class="sub">Every soundtrack starts with a broad selection built around your event, then gets refined by hand, song by song. Never a generic playlist, never anything thrown together at the last minute.</p>
+    <a href="cuentanos-tu-evento_en.html" class="btn-hero">Tell us about your event</a>
+  </div>
+</section>
+
+<section class="photo-strip">
+  <div class="photo-strip-inner">
+    <div class="photo-item">
+      <img src="foto-sala.jpg" alt="Room with warm lighting and a crystal chandelier">
+    </div>
+    <div class="photo-item">
+      <img src="foto-jardin.jpg" alt="String lights in a garden at dusk">
+    </div>
+    <div class="photo-item">
+      <img src="foto-mesa.jpg" alt="Table detail with flowers, glasses and candles">
+    </div>
+    <div class="photo-item">
+      <img src="foto-sonido.jpg" alt="Speaker detail with warm light">
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="wrap">
+    <p class="eyebrow">How it works</p>
+    <!-- EDITAR: título de la sección "cómo funciona" -->
+    <h2 class="section-title">From your event to your playlist, in three steps</h2>
+    <div class="steps-grid">
+      <div class="step">
+        <span class="step-n">01</span>
+        <!-- EDITAR: paso 1 -->
+        <h3>Tell us about your event</h3>
+        <p>Atmosphere, guests, time of day — whatever it takes to understand what you need.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">02</span>
+        <!-- EDITAR: paso 2 -->
+        <h3>Refined by hand</h3>
+        <p>Song by song, reviewed and sequenced with real judgment — never a random list.</p>
+      </div>
+      <div class="step">
+        <span class="step-n">03</span>
+        <!-- EDITAR: paso 3 -->
+        <h3>Receive your playlist</h3>
+        <p>Ready to play, exactly when it's needed.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="fork">
+  <div class="wrap">
+    <p class="eyebrow">Start here</p>
+    <!-- EDITAR: título de la sección de bifurcación -->
+    <h2 class="section-title">Where would you like to start?</h2>
+    <div class="fork-grid">
+      <a href="cuentanos-tu-evento_en.html" class="fork-card">
+        <!-- EDITAR: tarjeta cliente final -->
+        <h3>Planning a celebration?</h3>
+        <p>Private dinners, anniversaries, family or corporate gatherings — for when the music matters, but a DJ doesn't fit.</p>
+        <span class="link">Tell us about your event <span class="arrow">→</span></span>
+      </a>
+      <a href="para-profesionales_en.html" class="fork-card">
+        <!-- EDITAR: tarjeta profesionales -->
+        <h3>Do you organize events?</h3>
+        <p>Caterers, wedding planners, venues — add music curation to what you already offer, with no extra effort.</p>
+        <span class="link">For professionals <span class="arrow">→</span></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="why">
+  <div class="wrap why-inner">
+    <!-- EDITAR: párrafo de "por qué" -->
+    <p>We believe the music at an event deserves the same care as the menu or the venue — that's why every soundtrack goes through real human judgment, not just an automatic selection.</p>
+    <a href="nosotros_en.html">Learn more about us →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <a href="index_en.html" class="logo"><span class="la">la</span><span class="mu">musia</span></a>
+    <div class="footer-links">
+      <a href="para-profesionales_en.html">For professionals</a>
+      <a href="nosotros_en.html">About us</a>
+      <a href="cuentanos-tu-evento_en.html">Tell us about your event</a>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:24px;">
+    <p class="footer-note">© LAMUSIA</p>
+  </div>
+</footer>
+
+<script>
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', function () {
+    var isOpen = mobileMenu.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+</script>
+
+</body>
+</html>
