@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /solicitud.html
+Disallow: /solicitud_en.html
+Disallow: /buscar_playlist_widget.html
+Disallow: /buscar_playlist_widget_en.html
+Disallow: /valorar_playlist.html
+Disallow: /valorar_playlist_en.html
+
+Sitemap: https://lamusia.com/sitemap.xml
