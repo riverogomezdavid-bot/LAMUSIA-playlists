@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LAMUSIA — Your request</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #100C10; --noir-2: #17121A;
+    --champagne: #C9A961; --champagne-light: #E6D4A0; --champagne-dark: #A98A47;
+    --bone: #EDE7DA; --smoke: #9C9689; --hair: rgba(237,231,218,0.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--noir); color: var(--bone);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 60px 20px 80px;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; }
+  h1, h2 { font-family: 'Fraunces', serif; font-weight: 500; margin: 0; font-optical-sizing: none; font-variation-settings: 'opsz' 28; }
+  .logo { font-family: 'Fraunces', serif; font-size: 20px; text-align: center; margin-bottom: 40px; font-optical-sizing: none; font-variation-settings: 'opsz' 28; }
+  .logo .la { font-style: italic; font-weight: 500; color: var(--champagne-light); }
+  .logo .mu { color: var(--bone); font-weight: 600; }
+
+  /* ---------- ESTADOS: cargando / no valido ---------- */
+  .state { text-align: center; padding: 50px 20px; }
+  .state .spinner-lg {
+    width: 30px; height: 30px; border: 3px solid var(--hair); border-top-color: var(--champagne);
+    border-radius: 50%; margin: 0 auto 20px; animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state h2 { font-size: 22px; margin-bottom: 12px; }
+  .state p { font-size: 15px; color: var(--smoke); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+
+  /* ---------- FORMULARIO ---------- */
+  .intro { text-align: center; margin-bottom: 36px; }
+  .intro h1 { font-size: 30px; margin-bottom: 10px; }
+  .intro p { font-size: 15px; color: var(--smoke); line-height: 1.6; }
+
+  .form-card { background: var(--noir-2); border: 1px solid var(--hair); border-radius: 20px; padding: 38px 34px; }
+  .field { margin-bottom: 22px; }
+  .field label { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 8px; color: var(--bone); }
+  .field .optional { font-weight: 400; color: var(--smoke); }
+  .field input, .field select {
+    width: 100%; padding: 13px 16px; font-size: 15px; font-family: inherit;
+    background: var(--noir); color: var(--bone); border: 1px solid var(--hair);
+    border-radius: 10px; outline: none; transition: border-color .15s ease;
+  }
+  .field input::placeholder { color: var(--smoke); }
+  .field input:focus-visible, .field select:focus-visible { border-color: var(--champagne); }
+  .field select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%239C9689' stroke-width='1.5' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+
+  .radio-group { display: flex; gap: 10px; }
+  .radio-opt { flex: 1; position: relative; }
+  .radio-opt input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; pointer-events: none; }
+  .radio-opt label {
+    display: block; padding: 13px 14px; text-align: center; border-radius: 10px;
+    border: 1px solid var(--hair); background: var(--noir); font-size: 13.5px; font-weight: 600;
+    cursor: pointer; transition: border-color .15s ease, background .15s ease; margin: 0;
+  }
+  .radio-opt input:checked + label { border-color: var(--champagne); background: rgba(201,169,97,0.12); color: var(--champagne-light); }
+
+  .combo { position: relative; }
+  .combo-list {
+    position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 10;
+    background: var(--noir-2); border: 1px solid var(--hair); border-radius: 10px;
+    max-height: 220px; overflow-y: auto; display: none;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.45);
+  }
+  .combo-list.open { display: block; }
+  .combo-option { padding: 11px 16px; font-size: 14.5px; color: var(--bone); cursor: pointer; }
+  .combo-option:hover, .combo-option.highlighted { background: rgba(201,169,97,0.14); color: var(--champagne-light); }
+  .combo-empty { padding: 11px 16px; font-size: 13.5px; color: var(--smoke); }
+
+  .btn-submit {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; background: var(--champagne); color: var(--noir); font-weight: 700; font-size: 16px;
+    padding: 16px 20px; border-radius: 30px; border: none; cursor: pointer; font-family: inherit;
+    box-shadow: 0 0 26px rgba(201,169,97,0.5), 0 0 55px rgba(201,169,97,0.28);
+    transition: background .15s ease, transform .15s ease; margin-top: 8px;
+  }
+  .btn-submit:hover:not(:disabled) { background: var(--champagne-dark); transform: translateY(-1px); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .spinner {
+    width: 15px; height: 15px; border: 2px solid rgba(16,12,16,0.35); border-top-color: var(--noir);
+    border-radius: 50%; animation: spin 0.7s linear infinite; display: none;
+  }
+  .btn-submit[data-loading="true"] .spinner { display: inline-block; }
+
+  .privacy-note { font-size: 12.5px; color: var(--smoke); text-align: center; margin-top: 18px; line-height: 1.5; }
+  .privacy-note a { color: var(--champagne-light); }
+  .form-msg { margin-top: 16px; padding: 13px 16px; border-radius: 10px; font-size: 14px; line-height: 1.5; display: none; }
+  .form-msg.show { display: block; }
+  .form-msg.error { background: rgba(248,113,113,0.12); color: #fca5a5; }
+
+  .thanks { display: none; text-align: center; }
+  .thanks.show { display: block; }
+  .thanks .icon { font-size: 34px; margin-bottom: 18px; }
+  .thanks h2 { font-size: 26px; margin-bottom: 12px; }
+  .thanks p { font-size: 15.5px; color: var(--smoke); max-width: 380px; margin: 0 auto; line-height: 1.6; }
+
+  #formSection, #stateSection, #thanksSection { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><span class="la">la</span><span class="mu">musia</span></div>
+
+  <!-- Estado inicial: comprobando el enlace -->
+  <div class="state" id="stateSection">
+    <div class="spinner-lg" id="stateSpinner"></div>
+    <h2 id="stateTitle">Checking your link…</h2>
+    <p id="stateText">One moment, please.</p>
+  </div>
+
+  <!-- Formulario real -->
+  <div id="formSection">
+    <div class="intro">
+      <h1>Let's get the details</h1>
+      <p>This is where we start building your soundtrack — the more precise, the better the result fits.</p>
+    </div>
+
+    <div class="form-card">
+      <form id="realForm" novalidate>
+        <div class="field">
+          <label for="f-edad">Average age of the guests</label>
+          <input type="number" id="f-edad" min="11" max="99" placeholder="E.g. 35" required>
+        </div>
+
+        <div class="field">
+          <label for="f-pais-cliente-input">What country are you in?</label>
+          <div class="combo">
+            <input type="text" id="f-pais-cliente-input" class="combo-input" placeholder="Type to search…" autocomplete="off" required>
+            <input type="hidden" id="f-pais-cliente">
+            <div class="combo-list" id="f-pais-cliente-list"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-pais-asistentes-input">Country most of the guests are from</label>
+          <div class="combo">
+            <input type="text" id="f-pais-asistentes-input" class="combo-input" placeholder="Type to search…" autocomplete="off" required>
+            <input type="hidden" id="f-pais-asistentes">
+            <div class="combo-list" id="f-pais-asistentes-list"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What kind of atmosphere do you want to create?</label>
+          <div class="radio-group">
+            <div class="radio-opt">
+              <input type="radio" name="ambiente" id="f-ambiente-1" value="Formal">
+              <label for="f-ambiente-1">Formal</label>
+            </div>
+            <div class="radio-opt">
+              <input type="radio" name="ambiente" id="f-ambiente-2" value="Elegant">
+              <label for="f-ambiente-2">Elegant</label>
+            </div>
+            <div class="radio-opt">
+              <input type="radio" name="ambiente" id="f-ambiente-3" value="Relaxed">
+              <label for="f-ambiente-3">Relaxed</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Should the music invite people to dance, or make it easy to talk?</label>
+          <div class="radio-group">
+            <div class="radio-opt">
+              <input type="radio" name="bailar" id="f-bailar-1" value="Makes people want to dance">
+              <label for="f-bailar-1">Makes people want to dance</label>
+            </div>
+            <div class="radio-opt">
+              <input type="radio" name="bailar" id="f-bailar-2" value="Easy to talk over">
+              <label for="f-bailar-2">Easy to talk over</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>What time of day is the event?</label>
+          <div class="radio-group">
+            <div class="radio-opt">
+              <input type="radio" name="horario" id="f-horario-1" value="Morning">
+              <label for="f-horario-1">Morning</label>
+            </div>
+            <div class="radio-opt">
+              <input type="radio" name="horario" id="f-horario-2" value="Afternoon">
+              <label for="f-horario-2">Afternoon</label>
+            </div>
+            <div class="radio-opt">
+              <input type="radio" name="horario" id="f-horario-3" value="Evening">
+              <label for="f-horario-3">Evening</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="f-cancion">Is there a song that has to be on the list? <span class="optional">(optional)</span></label>
+          <input type="text" id="f-cancion" placeholder="Spotify link">
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Send</span>
+        </button>
+        <div class="form-msg error" id="formError"></div>
+        <p class="privacy-note">We use this data only to prepare your soundtrack. More information in our <a href="politica-privacidad_en.html" target="_blank">Privacy Policy</a>.</p>
+      </form>
+    </div>
+  </div>
+
+  <!-- Agradecimiento -->
+  <div class="thanks" id="thanksSection">
+    <div class="icon">🎧</div>
+    <h2>All set!</h2>
+    <p>We're already working on your soundtrack. As soon as it's polished, you'll receive it — usually within 24 hours.</p>
+  </div>
+</div>
+
+<script>
+  // EDITAR: pega aquí la URL real de tu Web App desplegada
+  var SCRIPT_URL = 'PON_AQUI_LA_URL_DE_TU_WEB_APP/exec';
+
+  var COUNTRIES = ["Afghanistan","Albania","Germany","Andorra","Angola","Antigua and Barbuda","Saudi Arabia","Algeria","Argentina","Armenia","Australia","Austria","Azerbaijan","Bahamas","Bangladesh","Barbados","Bahrain","Belgium","Belize","Benin","Belarus","Myanmar","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Bhutan","Cape Verde","Cambodia","Cameroon","Canada","Qatar","Chad","Chile","China","Cyprus","Vatican City","Colombia","Comoros","North Korea","South Korea","Ivory Coast","Costa Rica","Croatia","Cuba","Denmark","Dominica","Ecuador","Egypt","El Salvador","United Arab Emirates","Eritrea","Slovakia","Slovenia","Spain","United States","Estonia","Eswatini","Ethiopia","Philippines","Finland","Fiji","France","Gabon","Gambia","Georgia","Ghana","Grenada","Greece","Guatemala","Guyana","Guinea","Guinea-Bissau","Equatorial Guinea","Haiti","Honduras","Hungary","India","Indonesia","Iraq","Iran","Ireland","Iceland","Marshall Islands","Solomon Islands","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kyrgyzstan","Kiribati","Kosovo","Kuwait","Laos","Lesotho","Latvia","Lebanon","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","North Macedonia","Madagascar","Malaysia","Malawi","Maldives","Mali","Malta","Morocco","Mauritius","Mauritania","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Mozambique","Namibia","Nauru","Nepal","Nicaragua","Niger","Nigeria","Norway","New Zealand","Oman","Netherlands","Pakistan","Palau","Panama","Papua New Guinea","Paraguay","Peru","Poland","Portugal","United Kingdom","Central African Republic","Czech Republic","Republic of the Congo","Democratic Republic of the Congo","Dominican Republic","Rwanda","Romania","Russia","Samoa","Saint Kitts and Nevis","San Marino","Saint Vincent and the Grenadines","Saint Lucia","São Tomé and Príncipe","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Syria","Somalia","Sri Lanka","South Africa","Sudan","South Sudan","Sweden","Switzerland","Suriname","Thailand","Tanzania","Tajikistan","East Timor","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkmenistan","Turkey","Tuvalu","Ukraine","Uganda","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Yemen","Djibouti","Zambia","Zimbabwe"];
+
+  var stateSection = document.getElementById('stateSection');
+  var stateSpinner = document.getElementById('stateSpinner');
+  var stateTitle = document.getElementById('stateTitle');
+  var stateText = document.getElementById('stateText');
+  var formSection = document.getElementById('formSection');
+  var thanksSection = document.getElementById('thanksSection');
+
+  function showState(title, text) {
+    stateSpinner.style.display = 'none';
+    stateTitle.textContent = title;
+    stateText.textContent = text;
+    stateSection.style.display = 'block';
+  }
+
+  function getToken() {
+    var params = new URLSearchParams(window.location.search);
+    return params.get('token') || '';
+  }
+
+  function normalizeText(s) {
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  }
+
+  function setupCountryCombo(inputId, hiddenId, listId) {
+    var input = document.getElementById(inputId);
+    var hidden = document.getElementById(hiddenId);
+    var list = document.getElementById(listId);
+    var currentMatches = [];
+    var highlightedIndex = -1;
+
+    function renderList(matches) {
+      currentMatches = matches;
+      highlightedIndex = -1;
+      if (matches.length === 0) {
+        list.innerHTML = '<div class="combo-empty">No results</div>';
+      } else {
+        list.innerHTML = matches.map(function (c, i) {
+          return '<div class="combo-option" data-index="' + i + '">' + c + '</div>';
+        }).join('');
+      }
+      list.classList.add('open');
+    }
+
+    function closeList() { list.classList.remove('open'); }
+
+    function selectCountry(name) {
+      hidden.value = name;
+      input.value = name;
+      closeList();
+    }
+
+    function updateHighlight() {
+      var opts = list.querySelectorAll('.combo-option');
+      opts.forEach(function (opt, i) { opt.classList.toggle('highlighted', i === highlightedIndex); });
+    }
+
+    input.addEventListener('input', function () {
+      hidden.value = '';
+      var query = normalizeText(input.value.trim());
+      if (!query) { closeList(); return; }
+      renderList(COUNTRIES.filter(function (c) { return normalizeText(c).indexOf(query) !== -1; }));
+    });
+
+    input.addEventListener('focus', function () {
+      if (input.value.trim()) input.dispatchEvent(new Event('input'));
+    });
+
+    list.addEventListener('mousedown', function (e) {
+      var opt = e.target.closest('.combo-option');
+      if (!opt) return;
+      selectCountry(currentMatches[parseInt(opt.getAttribute('data-index'), 10)]);
+    });
+
+    input.addEventListener('keydown', function (e) {
+      if (!list.classList.contains('open')) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        highlightedIndex = Math.min(highlightedIndex + 1, currentMatches.length - 1);
+        updateHighlight();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        highlightedIndex = Math.max(highlightedIndex - 1, 0);
+        updateHighlight();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (highlightedIndex >= 0 && currentMatches[highlightedIndex]) selectCountry(currentMatches[highlightedIndex]);
+      } else if (e.key === 'Escape') {
+        closeList();
+      }
+    });
+
+    input.addEventListener('blur', function () {
+      setTimeout(function () {
+        closeList();
+        if (input.value !== hidden.value) {
+          if (COUNTRIES.indexOf(input.value) !== -1) {
+            hidden.value = input.value;
+          } else {
+            input.value = '';
+            hidden.value = '';
+          }
+        }
+      }, 150);
+    });
+  }
+
+  function setupCountryCombos() {
+    setupCountryCombo('f-pais-cliente-input', 'f-pais-cliente', 'f-pais-cliente-list');
+    setupCountryCombo('f-pais-asistentes-input', 'f-pais-asistentes', 'f-pais-asistentes-list');
+  }
+
+  var token = getToken();
+
+  if (!token) {
+    showState('Incomplete link', "This link doesn't look valid. Check that you copied it in full, or ask for a new one.");
+  } else {
+    stateSection.style.display = 'block';
+    var callbackName = 'jsonp_validate_' + Date.now();
+    var script = document.createElement('script');
+    window[callbackName] = function (data) {
+      document.body.removeChild(script);
+      delete window[callbackName];
+
+      if (data.valid) {
+        stateSection.style.display = 'none';
+        setupCountryCombos();
+        formSection.style.display = 'block';
+      } else if (data.reason === 'already_used') {
+        showState('This link has already been used', 'Each link only works for one request. If you think this is a mistake, write to us at hola@lamusia.com.');
+      } else {
+        showState('Invalid link', "We couldn't validate this link. Write to us at hola@lamusia.com and we'll help.");
+      }
+    };
+    script.src = SCRIPT_URL + '?action=validate_token&token=' + encodeURIComponent(token) + '&callback=' + callbackName;
+    script.onerror = function () {
+      showState('We could not check this link', 'Check your connection and try again in a moment.');
+    };
+    document.body.appendChild(script);
+  }
+
+  var form = document.getElementById('realForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var errorBox = document.getElementById('formError');
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorBox.classList.remove('show');
+
+    var edad = document.getElementById('f-edad').value.trim();
+    var paisCliente = document.getElementById('f-pais-cliente').value;
+    var paisAsistentes = document.getElementById('f-pais-asistentes').value;
+    var ambienteEl = document.querySelector('input[name="ambiente"]:checked');
+    var bailarEl = document.querySelector('input[name="bailar"]:checked');
+    var horarioEl = document.querySelector('input[name="horario"]:checked');
+    var cancion = document.getElementById('f-cancion').value.trim();
+
+    if (!edad || !paisCliente || !paisAsistentes || !ambienteEl || !bailarEl || !horarioEl) {
+      errorBox.textContent = 'Please fill in all the required fields.';
+      errorBox.classList.add('show');
+      return;
+    }
+
+    if (parseInt(edad, 10) <= 10) {
+      errorBox.textContent = 'Right now we prepare playlists for teens and adults — children\'s events need a different approach than ours.';
+      errorBox.classList.add('show');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.setAttribute('data-loading', 'true');
+
+    var callbackName = 'jsonp_submit_' + Date.now();
+    var script = document.createElement('script');
+    window[callbackName] = function (data) {
+      document.body.removeChild(script);
+      delete window[callbackName];
+
+      if (data.status === 'ok') {
+        formSection.style.display = 'none';
+        thanksSection.style.display = 'block';
+      } else {
+        errorBox.textContent = data.error || 'Something went wrong sending this. Please try again.';
+        errorBox.classList.add('show');
+        submitBtn.disabled = false;
+        submitBtn.removeAttribute('data-loading');
+      }
+    };
+
+    var params = new URLSearchParams({
+      action: 'submit_b2b2c_request',
+      token: token,
+      edad_media: edad,
+      pais_cliente: paisCliente,
+      pais_asistentes: paisAsistentes,
+      ambiente: ambienteEl.value,
+      bailar_o_conversar: bailarEl.value,
+      horario: horarioEl.value,
+      cancion_prioritaria: cancion,
+      language: 'EN',
+      callback: callbackName
+    });
+
+    script.src = SCRIPT_URL + '?' + params.toString();
+    script.onerror = function () {
+      errorBox.textContent = 'Something went wrong sending this. Please check your connection and try again.';
+      errorBox.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.removeAttribute('data-loading');
+    };
+    document.body.appendChild(script);
+  });
+</script>
+</body>
+</html>
