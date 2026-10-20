@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml" sizes="any">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#100C10">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lamusia — Tu espacio de profesionales</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #100C10; --noir-2: #17121A;
+    --champagne: #C9A961; --champagne-light: #E6D4A0; --champagne-dark: #A98A47;
+    --bone: #EDE7DA; --smoke: #9C9689; --hair: rgba(237,231,218,0.14);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--noir); color: var(--bone);
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased; line-height: 1.5;
+  }
+  h1, h2 { font-family: 'Fraunces', serif; font-weight: 500; margin: 0; font-optical-sizing: none; font-variation-settings: 'opsz' 28; }
+  .page { max-width: 1080px; margin: 0 auto; padding: 26px 22px 70px; }
+
+  /* ---------- CABECERA ---------- */
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 22px; border-bottom: 1px solid var(--hair); margin-bottom: 44px; }
+  .logo { font-family: 'Fraunces', serif; font-size: 22px; font-optical-sizing: none; font-variation-settings: 'opsz' 28; white-space: nowrap; }
+  .logo .la { font-style: italic; font-weight: 500; color: var(--champagne-light); }
+  .logo .mu { color: var(--bone); font-weight: 600; }
+  .logo .tag { font-family: 'Manrope', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--smoke); margin-left: 14px; }
+  .who { display: none; align-items: center; gap: 16px; font-size: 13px; color: var(--smoke); min-width: 0; }
+  .who.show { display: flex; }
+  .who .email { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .linkbtn { background: none; border: none; padding: 6px 2px; font: inherit; font-size: 13px; font-weight: 700; color: var(--champagne-light); cursor: pointer; }
+  .linkbtn:hover { color: var(--bone); }
+
+  /* ---------- ESTADOS Y TARJETAS ---------- */
+  .state { text-align: center; padding: 70px 20px; }
+  .spinner-lg { width: 34px; height: 34px; border: 3px solid var(--hair); border-top-color: var(--champagne); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 24px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .state h2 { font-size: 22px; margin-bottom: 8px; }
+  .state p { color: var(--smoke); font-size: 15px; margin: 0; }
+
+  .view { display: none; }
+  .view.show { display: block; }
+
+  .card { background: var(--noir-2); border: 1px solid var(--hair); border-radius: 20px; padding: 34px 32px; margin-bottom: 26px; }
+  .card.narrow { max-width: 520px; margin-left: auto; margin-right: auto; }
+  .card h1 { font-size: 28px; margin-bottom: 10px; }
+  .card h2 { font-size: 22px; margin-bottom: 6px; }
+  .card .sub { font-size: 14.5px; color: var(--smoke); margin: 0 0 26px; }
+
+  .intro { margin-bottom: 30px; }
+  .intro h1 { font-size: 32px; margin-bottom: 8px; }
+  .intro p { margin: 0; color: var(--smoke); font-size: 15px; max-width: 640px; }
+
+  /* ---------- FORMULARIOS ---------- */
+  .field { margin-bottom: 22px; }
+  .field > label, .field .lbl { display: block; font-size: 13.5px; font-weight: 700; margin-bottom: 8px; }
+  .field input[type="text"], .field input[type="email"], .field select {
+    width: 100%; padding: 13px 16px; font-size: 15px; font-family: inherit;
+    background: var(--noir); color: var(--bone); border: 1px solid var(--hair); border-radius: 10px; outline: none; transition: border-color .15s ease;
+  }
+  .field input::placeholder { color: var(--smoke); }
+  .field input:focus-visible, .field select:focus-visible { border-color: var(--champagne); }
+  .field .hint { font-size: 12.5px; color: var(--smoke); margin: 9px 0 0; }
+  .field .count { float: right; font-weight: 400; color: var(--smoke); font-size: 12px; }
+  .radios { display: flex; gap: 10px; max-width: 320px; }
+  .radios .opt { flex: 1; position: relative; }
+  .radios input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+  .radios label { display: block; padding: 12px 14px; text-align: center; border-radius: 10px; border: 1px solid var(--hair); background: var(--noir); font-size: 13.5px; font-weight: 600; margin: 0; pointer-events: none; }
+  .radios input:checked + label { border-color: var(--champagne); background: rgba(201,169,97,0.12); color: var(--champagne-light); }
+  .radios input:focus-visible + label { outline: 2px solid var(--champagne); outline-offset: 2px; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--champagne); color: var(--noir); font-weight: 700; font-size: 15.5px; font-family: inherit;
+    padding: 14px 28px; border-radius: 30px; border: none; cursor: pointer;
+    box-shadow: 0 0 22px rgba(201,169,97,0.42), 0 0 46px rgba(201,169,97,0.22); transition: background .15s ease, transform .15s ease;
+  }
+  .btn:hover:not(:disabled) { background: var(--champagne-dark); transform: translateY(-1px); }
+  .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .btn.block { width: 100%; }
+  .btn.ghost { background: transparent; color: var(--bone); border: 1px solid rgba(237,231,218,0.45); box-shadow: none; }
+  .btn.ghost:hover:not(:disabled) { background: transparent; border-color: var(--champagne-light); color: var(--champagne-light); }
+
+  .msg { display: none; margin-top: 18px; padding: 13px 16px; border-radius: 10px; font-size: 14px; }
+  .msg.show { display: block; }
+  .msg.error { background: rgba(248,113,113,0.12); color: #fca5a5; }
+  .msg.ok { background: rgba(201,169,97,0.12); color: var(--champagne-light); }
+
+  /* ---------- RESULTADO DE CREAR UN ENLACE ---------- */
+  .result { display: none; margin-top: 26px; padding: 22px; border: 1px solid var(--champagne); border-radius: 14px; background: rgba(201,169,97,0.07); }
+  .result.show { display: block; }
+  .result .rt { font-size: 13.5px; font-weight: 700; color: var(--champagne-light); margin-bottom: 4px; }
+  .result .rref { font-size: 14px; color: var(--smoke); margin-bottom: 14px; word-break: break-word; }
+  .result .rurl { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12.5px; color: var(--bone); background: var(--noir); border: 1px solid var(--hair); border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; word-break: break-all; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    font: inherit; font-size: 12.5px; font-weight: 700; padding: 8px 14px; border-radius: 20px;
+    border: 1px solid var(--hair); background: transparent; color: var(--champagne-light); cursor: pointer; transition: border-color .15s ease, background .15s ease; white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--champagne); }
+  .chip.copied { background: rgba(201,169,97,0.16); border-color: var(--champagne); color: var(--bone); }
+  .chip.warn { color: #fca5a5; border-color: rgba(248,113,113,0.4); }
+
+  /* ---------- LISTADO ---------- */
+  .listhead { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 22px; }
+  .listhead .tools { display: flex; align-items: center; gap: 10px; }
+  .listhead select {
+    padding: 10px 14px; font-size: 14px; font-family: inherit; background: var(--noir); color: var(--bone); border: 1px solid var(--hair); border-radius: 10px; outline: none;
+  }
+  .listhead select:focus-visible { border-color: var(--champagne); }
+  .tabla { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tabla th { text-align: left; font-size: 11.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--smoke); font-weight: 700; padding: 0 12px 12px 0; border-bottom: 1px solid var(--hair); }
+  .tabla td { padding: 17px 12px 17px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  .tabla tr:last-child td { border-bottom: none; }
+  .tabla .ref { font-weight: 700; word-break: break-word; max-width: 220px; }
+  .tabla .muted { color: var(--smoke); }
+  .tabla .small { font-size: 12.5px; }
+  .tabla .stack { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+  .stars { color: var(--champagne-light); letter-spacing: 2px; font-size: 15px; white-space: nowrap; }
+  .stars .off { color: rgba(237,231,218,0.22); }
+  .motivo { font-size: 12.5px; color: var(--smoke); margin-top: 4px; max-width: 220px; word-break: break-word; }
+  .badge { display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 10px; border-radius: 12px; border: 1px solid var(--hair); color: var(--smoke); white-space: nowrap; }
+  .badge.ok { color: var(--champagne-light); border-color: rgba(201,169,97,0.5); }
+  .empty { text-align: center; color: var(--smoke); padding: 40px 10px 20px; font-size: 14.5px; }
+  .truncado { font-size: 12.5px; color: var(--smoke); margin-top: 14px; }
+
+  .privacy-note { font-size: 12.5px; color: var(--smoke); text-align: center; margin: 20px 0 0; line-height: 1.5; }
+  .privacy-note a { color: var(--champagne-light); }
+  .hint-list { font-size: 12.5px; color: var(--smoke); margin: -6px 0 22px; }
+  /* interruptores de los avisos */
+  .sw { display: flex; align-items: flex-start; gap: 14px; padding: 15px 0; border-bottom: 1px solid var(--hair); cursor: pointer; position: relative; }
+  .sw:last-of-type { border-bottom: none; }
+  .sw input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .sw-ui { flex: 0 0 46px; height: 26px; border-radius: 13px; background: rgba(237,231,218,0.16); position: relative; transition: background .15s ease; margin-top: 1px; }
+  .sw-ui::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--bone); transition: transform .15s ease; }
+  .sw input:checked + .sw-ui { background: var(--champagne); }
+  .sw input:checked + .sw-ui::after { transform: translateX(20px); background: var(--noir); }
+  .sw input:focus-visible + .sw-ui { outline: 2px solid var(--champagne-light); outline-offset: 3px; }
+  .sw-txt b { display: block; font-size: 14.5px; font-weight: 700; }
+  .sw-txt small { display: block; color: var(--smoke); font-size: 13px; margin-top: 3px; line-height: 1.45; }
+  #formAvisos .btn { margin-top: 20px; }
+  .foot { margin-top: 50px; text-align: center; font-size: 13px; color: var(--smoke); }
+  .foot a { color: var(--champagne-light); }
+
+  @media (max-width: 860px) {
+    .page { padding: 20px 16px 60px; }
+    .top { margin-bottom: 30px; }
+    .logo .tag { display: none; }
+    .card { padding: 26px 20px; border-radius: 16px; }
+    .intro h1 { font-size: 27px; }
+    .tabla, .tabla tbody, .tabla tr, .tabla td { display: block; width: 100%; }
+    .tabla thead { display: none; }
+    .tabla tr { border: 1px solid var(--hair); border-radius: 14px; padding: 8px 16px; margin-bottom: 12px; background: var(--noir); }
+    .tabla td { border: none !important; padding: 9px 0; display: flex; gap: 14px; }
+    .tabla td::before { content: attr(data-label); flex: 0 0 92px; color: var(--smoke); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.07em; padding-top: 4px; }
+    .tabla .ref, .motivo { max-width: none; }
+    .tabla td[data-label=""]::before { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .btn, .chip, .spinner-lg { transition: none; animation: none; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="top">
+    <div class="logo"><span class="la">la</span><span class="mu">musia</span><span class="tag">Profesionales</span></div>
+    <div class="who" id="who">
+      <span class="email" id="whoEmail"></span>
+      <button type="button" class="linkbtn" id="btnSalir">Salir</button>
+    </div>
+  </header>
+
+  <noscript><div class="card narrow"><h1>Necesitamos JavaScript</h1><p class="sub">Activa JavaScript en tu navegador para usar este espacio.</p></div></noscript>
+
+  <!-- Entrando: comprobando el enlace del correo -->
+  <section class="view show" id="vistaCargando">
+    <div class="state">
+      <div class="spinner-lg" aria-hidden="true"></div>
+      <h2 id="cargandoTitulo">Un momento…</h2>
+      <p id="cargandoTexto">Estamos preparando tu espacio.</p>
+    </div>
+  </section>
+
+  <!-- Acceso -->
+  <section class="view" id="vistaLogin">
+    <div class="card narrow">
+      <h1>Entra en tu espacio</h1>
+      <p class="sub">Escribe tu email y te enviaremos un enlace para entrar. No hay contraseñas.</p>
+      <form id="formLogin" novalidate>
+        <div class="field">
+          <label for="loginEmail">Tu email</label>
+          <input type="email" id="loginEmail" autocomplete="email" inputmode="email" placeholder="nombre@tuempresa.com" required>
+        </div>
+        <button type="submit" class="btn block" id="btnLogin">Enviarme el enlace</button>
+        <div class="msg" id="loginMsg" role="status" aria-live="polite"></div>
+      </form>
+      <p class="privacy-note">Usamos tu email únicamente para darte acceso y avisarte de tus playlists. Más información en nuestra <a href="politica-privacidad.html" target="_blank" rel="noopener">Política de Privacidad</a>.</p>
+    </div>
+    <p class="foot">¿Aún no tienes acceso? Escríbenos a <a href="mailto:hola@lamusia.com">hola@lamusia.com</a>.</p>
+  </section>
+
+  <!-- Portal -->
+  <section class="view" id="vistaPortal">
+    <div class="intro">
+      <h1 id="saludo">Hola</h1>
+      <p>Genera un enlace por cada cliente y envíaselo. Pasadas 24 horas desde que lo rellene, aquí tendrás el enlace de su playlist para entregárselo.</p>
+    </div>
+
+    <div class="card">
+      <h2>Nuevo enlace</h2>
+      <p class="sub">Cada enlace sirve para un solo cliente y se puede usar una vez.</p>
+      <form id="formNuevo" novalidate>
+        <div class="field">
+          <label for="refInput">Referencia <span class="count" id="refCount">0/60</span></label>
+          <input type="text" id="refInput" maxlength="60" autocomplete="off" placeholder="Ej. Reunión en Santander" required>
+          <p class="hint">Es solo para que distingas este enlace de los demás. No incluyas datos personales de tu cliente.</p>
+        </div>
+        <div class="field">
+          <span class="lbl" id="idiomaLbl">Idioma de tu cliente</span>
+          <div class="radios" role="radiogroup" aria-labelledby="idiomaLbl">
+            <div class="opt"><input type="radio" name="idioma" id="idES" value="ES" checked><label for="idES">Español</label></div>
+            <div class="opt"><input type="radio" name="idioma" id="idEN" value="EN"><label for="idEN">Inglés</label></div>
+          </div>
+        </div>
+        <button type="submit" class="btn" id="btnCrear">Generar enlace</button>
+        <div class="msg" id="nuevoMsg" role="status" aria-live="polite"></div>
+      </form>
+
+      <div class="result" id="resultado">
+        <div class="rt">Enlace listo</div>
+        <div class="rref" id="resRef"></div>
+        <div class="rurl" id="resUrl"></div>
+        <div class="chips">
+          <button type="button" class="chip" id="resCopiarEnlace">Copiar enlace</button>
+          <button type="button" class="chip" id="resCopiarMensaje">Copiar mensaje para tu cliente</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="listhead">
+        <div>
+          <h2>Mis enlaces</h2>
+          <p class="sub" style="margin:0" id="contador">&nbsp;</p>
+        </div>
+        <div class="tools">
+          <label for="filtro" style="position:absolute;left:-9999px">Mostrar</label>
+          <select id="filtro">
+            <option value="todos">Todos</option>
+            <option value="sin_usar">Sin usar</option>
+            <option value="usados">Usados</option>
+          </select>
+          <button type="button" class="btn ghost" id="btnActualizar" style="padding:10px 20px;font-size:14px">Actualizar</button>
+        </div>
+      </div>
+      <p class="hint-list">Consejo: no abras tú el enlace de la playlist antes de enviarlo a tu cliente; al abrirlo se marca como entregada.</p>
+      <div class="msg" id="listaMsg" role="status" aria-live="polite"></div>
+      <div id="listaContenido"></div>
+    </div>
+
+    <div class="card" id="cardAvisos">
+      <h2>Avisos por email</h2>
+      <p class="sub">Elige cuáles quieres recibir, o ninguno. Puedes cambiarlo cuando quieras.</p>
+      <form id="formAvisos" novalidate>
+        <label class="sw"><input type="checkbox" id="avDisponible"><span class="sw-ui"></span><span class="sw-txt"><b>Playlist disponible</b><small>Te avisamos cuando pasan las 24 horas y ya puedes enviársela a tu cliente.</small></span></label>
+        <label class="sw"><input type="checkbox" id="avSinAbrir"><span class="sw-ui"></span><span class="sw-txt"><b>Aún sin abrir</b><small>Si a los 2 días tu cliente todavía no ha abierto su playlist.</small></span></label>
+        <label class="sw"><input type="checkbox" id="avSinValorar"><span class="sw-ui"></span><span class="sw-txt"><b>Falta la valoración</b><small>Si a los 3 días de abrir la playlist tu cliente no la ha valorado.</small></span></label>
+        <button type="submit" class="btn" id="btnAvisos">Guardar</button>
+        <div class="msg" id="avisosMsg" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script>
+// EDITAR: pega aquí la URL real de tu Web App desplegada
+var SCRIPT_URL = 'PON_AQUI_LA_URL_DE_TU_WEB_APP/exec';
+
+(function () {
+  var CLAVE_SESION = 'lamusia_portal_sesion';
+  var sesion = '';           // si el navegador no deja guardar (modo privado), la sesión vive solo en memoria
+  var cliente = null;
+  var contadorJsonp = 0;
+  var ultimoResultado = null; // el último enlace creado, para copiarlo
+
+  function $(id) { return document.getElementById(id); }
+
+  /* ---------- sesión guardada ---------- */
+  function leerSesion() { try { return localStorage.getItem(CLAVE_SESION) || sesion; } catch (e) { return sesion; } }
+  function guardarSesion(s) { sesion = s; try { localStorage.setItem(CLAVE_SESION, s); } catch (e) {} }
+  function borrarSesion() { sesion = ''; try { localStorage.removeItem(CLAVE_SESION); } catch (e) {} }
+
+  /* ---------- llamadas al servidor (JSONP, como el resto de la web) ---------- */
+  function llamar(accion, params, cb) {
+    var nombre = 'jsonp_portal_' + Date.now() + '_' + (contadorJsonp++);
+    var script = document.createElement('script');
+    var terminado = false;
+    var temporizador = setTimeout(function () { fin({ status: 'error', code: 'network', message: 'No hemos podido contactar con el servidor. Inténtalo de nuevo en un momento.' }); }, 25000);
+    function fin(datos) {
+      if (terminado) return; terminado = true;
+      clearTimeout(temporizador);
+      try { delete window[nombre]; } catch (e) { window[nombre] = undefined; }
+      if (script.parentNode) script.parentNode.removeChild(script);
+      cb(datos);
+    }
+    window[nombre] = fin;
+    var q = new URLSearchParams(Object.assign({ action: accion, callback: nombre }, params || {}));
+    script.src = SCRIPT_URL + '?' + q.toString();
+    script.onerror = function () { fin({ status: 'error', code: 'network', message: 'No hemos podido contactar con el servidor. Inténtalo de nuevo en un momento.' }); };
+    document.body.appendChild(script);
+  }
+  function llamarConSesion(accion, params, cb) {
+    llamar(accion, Object.assign({ s: leerSesion() }, params || {}), function (d) {
+      if (d && d.code === 'unauthorized') { borrarSesion(); cliente = null; mostrarLogin('Tu sesión ha caducado. Vuelve a entrar.', true); return; }
+      cb(d);
+    });
+  }
+
+  /* ---------- vistas ---------- */
+  function vista(id) {
+    ['vistaCargando', 'vistaLogin', 'vistaPortal'].forEach(function (v) { $(v).classList.toggle('show', v === id); });
+    $('who').classList.toggle('show', id === 'vistaPortal');
+  }
+  function mostrar(el, texto, tipo) { el.textContent = texto; el.className = 'msg show ' + tipo; }
+  function ocultar(el) { el.className = 'msg'; el.textContent = ''; }
+  function mostrarLogin(aviso, esError) {
+    vista('vistaLogin');
+    if (aviso) mostrar($('loginMsg'), aviso, esError ? 'error' : 'ok'); else ocultar($('loginMsg'));
+    $('btnLogin').disabled = false; $('btnLogin').textContent = 'Enviarme el enlace';
+  }
+  function cargando(titulo, texto) { $('cargandoTitulo').textContent = titulo; $('cargandoTexto').textContent = texto; vista('vistaCargando'); }
+
+  /* ---------- arranque ---------- */
+  function arrancar() {
+    var login = new URLSearchParams(window.location.search).get('login');
+    if (login) {
+      cargando('Entrando en tu espacio…', 'Comprobando tu enlace.');
+      llamar('portal_login_verify', { login: login }, function (d) {
+        try { window.history.replaceState(null, '', window.location.pathname); } catch (e) {}   // el enlace ya no debe quedarse en la barra
+        if (d && d.status === 'ok' && d.session) { guardarSesion(d.session); entrar(d.cliente); }
+        else mostrarLogin((d && d.message) || 'No hemos podido comprobar el enlace.', true);
+      });
+      return;
+    }
+    if (leerSesion()) {
+      cargando('Un momento…', 'Estamos preparando tu espacio.');
+      llamarConSesion('portal_me', {}, function (d) {
+        if (d && d.status === 'ok') entrar(d.cliente); else mostrarLogin((d && d.message) || '', true);
+      });
+      return;
+    }
+    mostrarLogin('');
+  }
+
+  function entrar(c) {
+    cliente = c;
+    $('whoEmail').textContent = c.email;
+    $('saludo').textContent = c.nombre ? 'Hola, ' + c.nombre : 'Hola';
+    pintarAvisos(c.avisos);
+    ocultar($('avisosMsg'));
+    vista('vistaPortal');
+    cargarLista();
+  }
+
+  /* ---------- acceso ---------- */
+  var emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  $('formLogin').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = $('loginEmail').value.trim();
+    if (!emailOk.test(email)) { mostrar($('loginMsg'), 'Escribe un email válido.', 'error'); return; }
+    var btn = $('btnLogin'); btn.disabled = true; btn.textContent = 'Enviando…'; ocultar($('loginMsg'));
+    llamar('portal_login_request', { email: email }, function (d) {
+      if (d && d.status === 'ok') {
+        mostrar($('loginMsg'), 'Revisa tu correo: si ese email tiene acceso, te hemos enviado un enlace (caduca en 15 minutos). Si no llega, mira en la carpeta de spam.', 'ok');
+        btn.textContent = 'Enlace enviado';
+        setTimeout(function () { btn.disabled = false; btn.textContent = 'Enviar de nuevo'; }, 20000);
+      } else {
+        mostrar($('loginMsg'), (d && d.message) || 'No se ha podido enviar el enlace. Inténtalo de nuevo.', 'error');
+        btn.disabled = false; btn.textContent = 'Enviarme el enlace';
+      }
+    });
+  });
+
+  $('btnSalir').addEventListener('click', function () {
+    llamarConSesion('portal_logout', {}, function () {});
+    borrarSesion(); cliente = null; ultimoResultado = null;
+    $('resultado').classList.remove('show'); $('listaContenido').textContent = '';
+    mostrarLogin('Has salido de tu espacio.', false);
+  });
+
+  /* ---------- textos para copiar (desde el catering hacia su cliente) ---------- */
+  function nombreProveedor() { return cliente && cliente.tipo === 'B2B' && cliente.nombre ? cliente.nombre : ''; }
+  function msgCuestionario(it) {
+    var N = nombreProveedor();
+    if (it.idioma === 'EN') {
+      return (N ? 'From ' + N + ', we want the music at your celebration to match everything else. To tailor it to you, tell us' : 'To tailor the music to your celebration, tell us') +
+        ' how it will be in this short questionnaire (it takes a couple of minutes): ' + it.enlace_cuestionario;
+    }
+    return (N ? 'Desde ' + N + ' queremos que la música de tu celebración esté a la altura del resto. Para preparártela a medida, cuéntanos' : 'Para preparar la música de tu celebración a medida, cuéntanos') +
+      ' cómo será en este breve cuestionario (un par de minutos): ' + it.enlace_cuestionario;
+  }
+  function msgEntrega(it) {
+    var N = nombreProveedor();
+    if (it.idioma === 'EN') {
+      return (N ? 'From ' + N + ' we\'re sending you the soundtrack for your celebration, handpicked by Lamusia: ' : 'We\'re sending you the soundtrack for your celebration, handpicked: ') +
+        'every song chosen and ordered so the music takes its own journey from start to finish. Open it here and it will take you to Spotify: ' + it.enlace_playlist +
+        '\n\nJust press play when you begin; from there, everything flows.' +
+        (it.enlace_valoracion ? ' When the celebration is over, tell us how it sounded (it only takes a moment): ' + it.enlace_valoracion : '');
+    }
+    return (N ? 'Desde ' + N + ' te hacemos llegar la banda sonora de tu celebración, preparada a mano por Lamusia: ' : 'Te hacemos llegar la banda sonora de tu celebración, preparada a mano: ') +
+      'cada canción elegida y ordenada para que la música haga su viaje de principio a fin. Ábrela aquí y te llevará a Spotify: ' + it.enlace_playlist +
+      '\n\nSolo hay que darle al play al empezar; a partir de ahí, todo fluye.' +
+      (it.enlace_valoracion ? ' Cuando termine la celebración, cuéntanos qué tal sonó (solo te llevará un momento): ' + it.enlace_valoracion : '');
+  }
+  function msgValoracion(it) {
+    if (it.idioma === 'EN') {
+      return 'We hope the music accompanied your celebration just as you imagined. Would you tell us how it went? It only takes a moment: ' + it.enlace_valoracion + ' Thank you.';
+    }
+    return 'Esperamos que la música acompañara tu celebración como imaginabas. ¿Nos cuentas qué tal fue? Solo te llevará un momento: ' + it.enlace_valoracion + ' Gracias.';
+  }
+
+  /* ---------- copiar al portapapeles ---------- */
+  function copiarTexto(texto, boton) {
+    function listo() {
+      var original = boton.getAttribute('data-original') || boton.textContent;
+      boton.setAttribute('data-original', original);
+      boton.textContent = 'Copiado ✓'; boton.classList.add('copied');
+      clearTimeout(boton._t);
+      boton._t = setTimeout(function () { boton.textContent = original; boton.classList.remove('copied'); }, 1800);
+    }
+    function respaldo() {
+      var ta = document.createElement('textarea');
+      ta.value = texto; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '-1000px';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+      if (ok) listo(); else { boton.textContent = 'No se pudo copiar'; boton.classList.add('warn'); setTimeout(function () { boton.textContent = boton.getAttribute('data-original') || 'Copiar'; boton.classList.remove('warn'); }, 2200); }
+    }
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(texto).then(listo, respaldo); else respaldo();
+  }
+  function chip(texto, fn) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.textContent = texto;
+    b.addEventListener('click', function () { fn(b); });
+    return b;
+  }
+
+  /* ---------- nuevo enlace ---------- */
+  $('refInput').addEventListener('input', function () { $('refCount').textContent = $('refInput').value.length + '/60'; });
+  $('formNuevo').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var ref = $('refInput').value.trim();
+    var idioma = document.querySelector('input[name="idioma"]:checked').value;
+    ocultar($('nuevoMsg'));
+    if (!ref) { mostrar($('nuevoMsg'), 'Escribe una referencia para distinguir este enlace de los demás.', 'error'); $('refInput').focus(); return; }
+    var btn = $('btnCrear'); btn.disabled = true; btn.textContent = 'Generando…';
+    llamarConSesion('portal_create_link', { referencia: ref, idioma: idioma }, function (d) {
+      btn.disabled = false; btn.textContent = 'Generar enlace';
+      if (d && d.status === 'ok') {
+        ultimoResultado = d;
+        $('resRef').textContent = 'Referencia: ' + d.referencia;
+        $('resUrl').textContent = d.enlace_cuestionario;
+        $('resultado').classList.add('show');
+        $('refInput').value = ''; $('refCount').textContent = '0/60';
+        cargarLista();
+      } else {
+        mostrar($('nuevoMsg'), (d && d.message) || 'No se ha podido generar el enlace.', 'error');
+      }
+    });
+  });
+  $('resCopiarEnlace').addEventListener('click', function () { if (ultimoResultado) copiarTexto(ultimoResultado.enlace_cuestionario, this); });
+  $('resCopiarMensaje').addEventListener('click', function () { if (ultimoResultado) copiarTexto(msgCuestionario(ultimoResultado), this); });
+
+  /* ---------- avisos por email ---------- */
+  function pintarAvisos(av) {
+    av = av || { disponible: true, sin_abrir: true, sin_valorar: true };
+    $('avDisponible').checked = !!av.disponible;
+    $('avSinAbrir').checked = !!av.sin_abrir;
+    $('avSinValorar').checked = !!av.sin_valorar;
+  }
+  $('formAvisos').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('btnAvisos'); btn.disabled = true; btn.textContent = 'Guardando…'; ocultar($('avisosMsg'));
+    llamarConSesion('portal_save_prefs', {
+      disponible: $('avDisponible').checked ? '1' : '0',
+      sin_abrir: $('avSinAbrir').checked ? '1' : '0',
+      sin_valorar: $('avSinValorar').checked ? '1' : '0'
+    }, function (d) {
+      btn.disabled = false; btn.textContent = 'Guardar';
+      if (d && d.status === 'ok') {
+        if (cliente) cliente.avisos = d.avisos;
+        pintarAvisos(d.avisos);
+        mostrar($('avisosMsg'), 'Guardado. Tus avisos quedan así.', 'ok');
+        setTimeout(function () { ocultar($('avisosMsg')); }, 4000);
+      } else {
+        mostrar($('avisosMsg'), (d && d.message) || 'No se ha podido guardar. Inténtalo de nuevo.', 'error');
+      }
+    });
+  });
+
+  /* ---------- listado ---------- */
+  function dosDigitos(n) { return (n < 10 ? '0' : '') + n; }
+  function fFecha(iso) {
+    if (!iso) return '';
+    var d = new Date(iso); if (isNaN(d.getTime())) return '';
+    return dosDigitos(d.getDate()) + '/' + dosDigitos(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + dosDigitos(d.getHours()) + ':' + dosDigitos(d.getMinutes());
+  }
+  function fDia(iso) {
+    var d = new Date(iso); if (isNaN(d.getTime())) return '';
+    return dosDigitos(d.getDate()) + '/' + dosDigitos(d.getMonth() + 1) + ' a las ' + dosDigitos(d.getHours()) + ':' + dosDigitos(d.getMinutes());
+  }
+  function celda(fila, etiqueta) { var td = document.createElement('td'); td.setAttribute('data-label', etiqueta); fila.appendChild(td); return td; }
+  function texto(td, t, clase) { var s = document.createElement('span'); s.textContent = t; if (clase) s.className = clase; td.appendChild(s); return s; }
+
+  function cargarLista() {
+    ocultar($('listaMsg'));
+    $('contador').textContent = 'Cargando…';
+    llamarConSesion('portal_list_links', { filtro: $('filtro').value }, function (d) {
+      if (!d || d.status !== 'ok') { $('contador').innerHTML = '&nbsp;'; mostrar($('listaMsg'), (d && d.message) || 'No se ha podido cargar el listado.', 'error'); return; }
+      pintarLista(d);
+    });
+  }
+
+  function pintarLista(d) {
+    var cont = $('listaContenido'); cont.textContent = '';
+    $('contador').textContent = d.total === 1 ? '1 enlace' : d.total + ' enlaces';
+    if (!d.enlaces.length) {
+      var p = document.createElement('p'); p.className = 'empty';
+      p.textContent = $('filtro').value === 'todos' ? 'Todavía no has generado ningún enlace. Crea el primero arriba.' : 'No hay enlaces con este filtro.';
+      cont.appendChild(p); return;
+    }
+    var tabla = document.createElement('table'); tabla.className = 'tabla';
+    var cab = document.createElement('thead'), fc = document.createElement('tr');
+    ['Creado', 'Referencia', 'Enlace', 'Usado', 'Playlist', 'Valoración', ''].forEach(function (h) { var th = document.createElement('th'); th.textContent = h; fc.appendChild(th); });
+    cab.appendChild(fc); tabla.appendChild(cab);
+    var cuerpo = document.createElement('tbody');
+    d.enlaces.forEach(function (it) { cuerpo.appendChild(filaEnlace(it)); });
+    tabla.appendChild(cuerpo); cont.appendChild(tabla);
+    if (d.truncado) { var t = document.createElement('p'); t.className = 'truncado'; t.textContent = 'Se muestran los 300 más recientes.'; cont.appendChild(t); }
+  }
+
+  function filaEnlace(it) {
+    var tr = document.createElement('tr');
+    texto(celda(tr, 'Creado'), fFecha(it.creado), 'muted');
+    texto(celda(tr, 'Referencia'), it.referencia, 'ref');
+
+    var tdEnlace = celda(tr, 'Enlace');
+    if (it.estado === 'SIN_USAR') {
+      var g = document.createElement('div'); g.className = 'chips';
+      g.appendChild(chip('Copiar enlace', function (b) { copiarTexto(it.enlace_cuestionario, b); }));
+      g.appendChild(chip('Copiar mensaje', function (b) { copiarTexto(msgCuestionario(it), b); }));
+      tdEnlace.appendChild(g);
+    } else if (it.estado === 'ANULADO') {
+      var a = document.createElement('span'); a.className = 'badge'; a.textContent = 'Anulado'; tdEnlace.appendChild(a);
+    } else {
+      var u = document.createElement('span'); u.className = 'badge ok'; u.textContent = 'Usado'; tdEnlace.appendChild(u);
+    }
+
+    texto(celda(tr, 'Usado'), it.usado_en ? fFecha(it.usado_en) : '—', 'muted');
+
+    var tdPl = celda(tr, 'Playlist');
+    if (it.estado === 'EN_PREPARACION') {
+      var st = document.createElement('div'); st.className = 'stack';
+      var b1 = document.createElement('span'); b1.className = 'badge'; b1.textContent = 'En preparación'; st.appendChild(b1);
+      if (it.disponible_desde) texto(st, 'Disponible el ' + fDia(it.disponible_desde), 'muted small');
+      tdPl.appendChild(st);
+    } else if (it.estado === 'DISPONIBLE') {
+      var s2 = document.createElement('div'); s2.className = 'stack';
+      var g2 = document.createElement('div'); g2.className = 'chips';
+      g2.appendChild(chip('Copiar enlace', function (b) { copiarTexto(it.enlace_playlist, b); }));
+      g2.appendChild(chip('Copiar mensaje', function (b) { copiarTexto(msgEntrega(it), b); }));
+      s2.appendChild(g2);
+      texto(s2, it.entregada ? 'Abierta por tu cliente' + (it.entregada_en ? ' el ' + fDia(it.entregada_en) : '') : 'Aún sin abrir', 'muted small');
+      tdPl.appendChild(s2);
+    } else {
+      texto(tdPl, '—', 'muted');
+    }
+
+    var tdVal = celda(tr, 'Valoración');
+    if (it.valoracion !== null && it.valoracion !== undefined) {
+      var estrellas = document.createElement('div'); estrellas.className = 'stars';
+      estrellas.setAttribute('aria-label', it.valoracion + ' de 5');
+      for (var i = 1; i <= 5; i++) { var e = document.createElement('span'); e.textContent = '★'; if (i > it.valoracion) e.className = 'off'; estrellas.appendChild(e); }
+      var bloqueVal = document.createElement('div');
+      bloqueVal.appendChild(estrellas);
+      if (it.motivo) { var m = document.createElement('div'); m.className = 'motivo'; m.textContent = it.motivo; bloqueVal.appendChild(m); }
+      tdVal.appendChild(bloqueVal);
+    } else if (it.estado === 'DISPONIBLE' && it.entregada) {
+      var s3 = document.createElement('div'); s3.className = 'stack';
+      texto(s3, 'Sin valoración', 'muted small');
+      s3.appendChild(chip('Copiar mensaje', function (b) { copiarTexto(msgValoracion(it), b); }));
+      tdVal.appendChild(s3);
+    } else {
+      texto(tdVal, '—', 'muted');
+    }
+
+    var tdAcc = celda(tr, '');
+    if (it.estado === 'SIN_USAR') {
+      var anular = chip('Anular', function (b) {
+        if (!b._confirmar) {
+          b._confirmar = true; b.textContent = 'Confirmar anulación'; b.classList.add('warn');
+          b._t = setTimeout(function () { b._confirmar = false; b.textContent = 'Anular'; b.classList.remove('warn'); }, 4000);
+          return;
+        }
+        clearTimeout(b._t); b.disabled = true; b.textContent = 'Anulando…';
+        llamarConSesion('portal_cancel_link', { token: it.token }, function (d) {
+          if (d && d.status === 'ok') cargarLista();
+          else { b.disabled = false; b._confirmar = false; b.textContent = 'Anular'; b.classList.remove('warn'); mostrar($('listaMsg'), (d && d.message) || 'No se ha podido anular.', 'error'); }
+        });
+      });
+      tdAcc.appendChild(anular);
+    }
+    return tr;
+  }
+
+  $('filtro').addEventListener('change', cargarLista);
+  $('btnActualizar').addEventListener('click', cargarLista);
+
+  arrancar();
+})();
+</script>
+</body>
+</html>
