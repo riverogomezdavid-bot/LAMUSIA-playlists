@@ -1,0 +1,16 @@
+/* Portada: ajuste de la estación (INVIERNO)
+   En esta foto las copas están a la izquierda y las velas en el centro y la derecha, así que el texto pasa abajo a la derecha,
+   con el eslogan en una sola línea, para dejar ver la mesa y las velas. Este archivo viaja dentro del paquete de cada estación
+   y se sube junto con las imágenes: al cambiar de estación sustituye al anterior. No hace falta editarlo. */
+@media (min-width: 951px) {
+  .hero { justify-content: flex-end; }
+  .hero-copy { width: clamp(420px, 43vw, 860px); }
+  .hero-tagline { white-space: nowrap; }
+  .hero .bg-media::after {
+    background:
+      linear-gradient(to bottom, rgba(16,12,16,0.90) 0%, rgba(16,12,16,0.80) 6%, rgba(16,12,16,0.44) 12.5%, rgba(16,12,16,0) 22%),
+      radial-gradient(ellipse 29% 19% at 92% 4%, rgba(16,12,16,0.55) 0%, rgba(16,12,16,0) 100%),
+      radial-gradient(ellipse 44% 52% at 74% 76%, rgba(16,12,16,0.70) 0%, rgba(16,12,16,0.62) 42%, rgba(16,12,16,0.35) 74%, rgba(16,12,16,0) 100%),
+      linear-gradient(to top, rgba(16,12,16,0.28) 0%, rgba(16,12,16,0) 38%),
+      linear-gradient(rgba(16,12,16,0.04), rgba(16,12,16,0.04)); }
+}
